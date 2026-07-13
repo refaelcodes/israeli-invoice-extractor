@@ -1,0 +1,97 @@
+{
+  "id": "07_bank_statement_3",
+  "files": {
+    "pdf": "07_bank_statement/07_bank_statement_3.pdf",
+    "png": "07_bank_statement/07_bank_statement_3.png"
+  },
+  "fields": {
+    "doc_type": "דף חשבון בנק",
+    "bank": "בנק דיסקונט",
+    "bank_code": "11",
+    "branch": 717,
+    "account_number": 512359,
+    "account_holder": "שרה רוזנברג",
+    "statement_date": "10/06/2026",
+    "currency": "ILS",
+    "transactions": [
+      {
+        "date": "15/06/2026",
+        "description": "חיוב כרטיס אשראי",
+        "debit": 6204.84,
+        "credit": null,
+        "balance": -3183.78
+      },
+      {
+        "date": "19/06/2026",
+        "description": "עמלת ניהול חשבון",
+        "debit": 6496.99,
+        "credit": null,
+        "balance": -9680.77
+      },
+      {
+        "date": "20/06/2026",
+        "description": "הוראת קבע - חשמל",
+        "debit": null,
+        "credit": 4709.79,
+        "balance": -4970.98
+      },
+      {
+        "date": "23/06/2026",
+        "description": "משיכת מזומן כספומט",
+        "debit": 5985.98,
+        "credit": null,
+        "balance": -10956.96
+      },
+      {
+        "date": "28/06/2026",
+        "description": "העברה בבנקאות מקוונת",
+        "debit": 6417.89,
+        "credit": null,
+        "balance": -17374.85
+      },
+      {
+        "date": "30/06/2026",
+        "description": "הוראת קבע - ארנונה",
+        "debit": 2122.87,
+        "credit": null,
+        "balance": -19497.72
+      },
+      {
+        "date": "02/07/2026",
+        "description": "חיוב כרטיס אשראי",
+        "debit": 5907.28,
+        "credit": null,
+        "balance": -25405.0
+      },
+      {
+        "date": "07/07/2026",
+        "description": "הוראת קבע - חשמל",
+        "debit": null,
+        "credit": 2605.62,
+        "balance": -22799.38
+      },
+      {
+        "date": "11/07/2026",
+        "description": "הוראת קבע - חשמל",
+        "debit": null,
+        "credit": 2294.55,
+        "balance": -20504.83
+      },
+      {
+        "date": "16/07/2026",
+        "description": "חיוב כרטיס אשראי",
+        "debit": 5413.06,
+        "credit": null,
+        "balance": -25917.89
+      },
+      {
+        "date": "19/07/2026",
+        "description": "משיכת מזומן כספומט",
+        "debit": null,
+        "credit": 446.34,
+        "balance": -25471.55
+      }
+    ],
+    "closing_balance": -25471.55
+  }
+}

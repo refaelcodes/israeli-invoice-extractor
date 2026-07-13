@@ -1,0 +1,50 @@
+{
+  "id": "02_invoice_tax_receipt_3",
+  "files": {
+    "pdf": "02_invoice_tax_receipt/02_invoice_tax_receipt_3.pdf",
+    "png": "02_invoice_tax_receipt/02_invoice_tax_receipt_3.png"
+  },
+  "fields": {
+    "doc_type": "חשבונית מס / קבלה",
+    "doc_number": 54617,
+    "issue_date": "11/12/2025",
+    "seller": {
+      "name": "סחר ישראל בע\"מ",
+      "vat_id": "322398918"
+    },
+    "customer": {
+      "name": "סחר וויז בע\"מ",
+      "id": "117189308"
+    },
+    "line_items": [
+      {
+        "description": "הדרכת צוות",
+        "unit": "מפגש",
+        "quantity": 3,
+        "unit_price": 600,
+        "line_total": 1800
+      },
+      {
+        "description": "אחסון ענן",
+        "unit": "חודש",
+        "quantity": 1,
+        "unit_price": 480,
+        "line_total": 480
+      },
+      {
+        "description": "הדרכת צוות",
+        "unit": "מפגש",
+        "quantity": 1,
+        "unit_price": 350,
+        "line_total": 350
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 2630,
+    "vat_rate": 0.18,
+    "vat_amount": 473.4,
+    "total": 3103.4,
+    "allocation_number": null,
+    "is_paid": true
+  }
+}

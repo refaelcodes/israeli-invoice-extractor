@@ -1,0 +1,76 @@
+{
+  "id": "07_bank_statement_1",
+  "files": {
+    "pdf": "07_bank_statement/07_bank_statement_1.pdf",
+    "png": "07_bank_statement/07_bank_statement_1.png"
+  },
+  "fields": {
+    "doc_type": "דף חשבון בנק",
+    "bank": "בנק הפועלים",
+    "bank_code": "12",
+    "branch": 838,
+    "account_number": 414189,
+    "account_holder": "איתי דהן",
+    "statement_date": "02/07/2026",
+    "currency": "ILS",
+    "transactions": [
+      {
+        "date": "08/07/2026",
+        "description": "החזר הלוואה",
+        "debit": 4124.59,
+        "credit": null,
+        "balance": 14642.6
+      },
+      {
+        "date": "13/07/2026",
+        "description": "משיכת מזומן כספומט",
+        "debit": null,
+        "credit": 5915.29,
+        "balance": 20557.89
+      },
+      {
+        "date": "16/07/2026",
+        "description": "הוראת קבע - חשמל",
+        "debit": 3860.37,
+        "credit": null,
+        "balance": 16697.52
+      },
+      {
+        "date": "18/07/2026",
+        "description": "משיכת מזומן כספומט",
+        "debit": 3920.37,
+        "credit": null,
+        "balance": 12777.15
+      },
+      {
+        "date": "20/07/2026",
+        "description": "הפקדת שיק",
+        "debit": 4272.28,
+        "credit": null,
+        "balance": 8504.87
+      },
+      {
+        "date": "25/07/2026",
+        "description": "החזר הלוואה",
+        "debit": null,
+        "credit": 2219.2,
+        "balance": 10724.07
+      },
+      {
+        "date": "30/07/2026",
+        "description": "העברת זכות",
+        "debit": 3360.14,
+        "credit": null,
+        "balance": 7363.93
+      },
+      {
+        "date": "01/08/2026",
+        "description": "תשלום שכר",
+        "debit": 453.46,
+        "credit": null,
+        "balance": 6910.47
+      }
+    ],
+    "closing_balance": 6910.47
+  }
+}

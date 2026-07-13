@@ -1,0 +1,22 @@
+{
+  "id": "08_cheque_2",
+  "files": {
+    "pdf": "08_cheque/08_cheque_2.pdf",
+    "png": "08_cheque/08_cheque_2.png"
+  },
+  "fields": {
+    "doc_type": "שיק",
+    "bank": "בנק דיסקונט",
+    "bank_code": "11",
+    "branch": 121,
+    "account_number": 661625,
+    "cheque_number": 7494,
+    "date": "28/06/2026",
+    "payer": "ישראל ביטון",
+    "payee": "ישראל פרץ",
+    "currency": "ILS",
+    "amount": 2400.0,
+    "amount_words": "שניים אלף ארבע מאות שקלים חדשים",
+    "micr": "7494-11-121-661625"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "id": "01_invoice_tax_3",
+  "files": {
+    "pdf": "01_invoice_tax/01_invoice_tax_3.pdf",
+    "png": "01_invoice_tax/01_invoice_tax_3.png"
+  },
+  "fields": {
+    "doc_type": "חשבונית מס",
+    "doc_number": 63164,
+    "issue_date": "15/12/2025",
+    "seller": {
+      "name": "תוכנה נט בע\"מ",
+      "vat_id": "995506573"
+    },
+    "customer": {
+      "name": "פתרונות ישראל בע\"מ",
+      "id": "908939622"
+    },
+    "line_items": [
+      {
+        "description": "פיתוח תוכנה בהזמנה",
+        "unit": "שעה",
+        "quantity": 10,
+        "unit_price": 480,
+        "line_total": 4800
+      },
+      {
+        "description": "אפיון ובינה עסקית",
+        "unit": "שעה",
+        "quantity": 1,
+        "unit_price": 350,
+        "line_total": 350
+      },
+      {
+        "description": "שירותי DevOps",
+        "unit": "חודש",
+        "quantity": 12,
+        "unit_price": 2500,
+        "line_total": 30000
+      },
+      {
+        "description": "פיתוח תוכנה בהזמנה",
+        "unit": "שעה",
+        "quantity": 12,
+        "unit_price": 220,
+        "line_total": 2640
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 37790,
+    "vat_rate": 0.18,
+    "vat_amount": 6802.2,
+    "total": 44592.2,
+    "allocation_number": "065645239",
+    "is_paid": false
+  }
+}

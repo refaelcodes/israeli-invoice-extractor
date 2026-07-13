@@ -1,0 +1,11 @@
+# GUI (веб-приложение) + офлайн mock-режим работают без ключа/сети.
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-dotenv>=1.0        # чтение .env (ANTHROPIC_API_KEY / CLAUDE_CODE_OAUTH_TOKEN)
+
+# Растеризация PDF -> PNG (fitz); poppler не нужен
+pymupdf>=1.24
+
+# Извлечение через Claude (нужно только для реального режима)
+anthropic>=0.40          # ai_mode="api"  — прямой Anthropic Messages API (нужен ключ + сеть)
+claude-agent-sdk>=0.2    # ai_mode="sdk"  — Claude Agent SDK через подписку/локальную авторизацию

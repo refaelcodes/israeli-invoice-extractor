@@ -1,0 +1,43 @@
+{
+  "id": "04_receipt_1",
+  "files": {
+    "pdf": "04_receipt/04_receipt_1.pdf",
+    "png": "04_receipt/04_receipt_1.png"
+  },
+  "fields": {
+    "doc_type": "קבלה",
+    "doc_number": 76856,
+    "issue_date": "09/06/2026",
+    "seller": {
+      "name": "דיגיטל וויז בע\"מ",
+      "vat_id": "619002405"
+    },
+    "customer": {
+      "name": "אבטחת מידע טק בע\"מ",
+      "id": "393401922"
+    },
+    "line_items": [
+      {
+        "description": "רישיון תוכנה שנתי",
+        "unit": "יח'",
+        "quantity": 5,
+        "unit_price": 600,
+        "line_total": 3000
+      },
+      {
+        "description": "שירותי אינטגרציה",
+        "unit": "שעה",
+        "quantity": 1,
+        "unit_price": 480,
+        "line_total": 480
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 3480,
+    "vat_rate": 0.18,
+    "vat_amount": 626.4,
+    "total": 4106.4,
+    "allocation_number": null,
+    "is_paid": true
+  }
+}

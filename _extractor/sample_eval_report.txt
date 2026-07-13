@@ -1,0 +1,42 @@
+=== ТОЧНОСТЬ ЭКСТРАКТОРА ===
+Документов сверено: 24 | полей: 741 | общая точность: 94.9%
+
+По документам:
+  01_invoice_tax_1              92.3%
+  01_invoice_tax_2              91.2%
+  01_invoice_tax_3              91.2%
+  02_invoice_tax_receipt_1      89.7%
+  02_invoice_tax_receipt_2      92.3%
+  02_invoice_tax_receipt_3      93.1%
+  03_invoice_proforma_1         94.1%
+  03_invoice_proforma_2         91.7%
+  03_invoice_proforma_3         91.7%
+  04_receipt_1                  91.7%
+  04_receipt_2                  93.1%
+  04_receipt_3                  93.1%
+  05_invoice_credit_1           89.7%
+  05_invoice_credit_2           91.2%
+  05_invoice_credit_3           89.7%
+  06_payslip_1                 100.0%
+  06_payslip_2                 100.0%
+  06_payslip_3                 100.0%
+  07_bank_statement_1          100.0%
+  07_bank_statement_2          100.0%
+  07_bank_statement_3          100.0%
+  08_cheque_1                  100.0%
+  08_cheque_2                  100.0%
+  08_cheque_3                  100.0%
+
+Слабейшие поля (точность по возрастанию):
+  customer.id                          0.0%  (0/15)
+  allocation_number                   46.7%  (7/15)
+  line_items[].description            70.0%  (35/50)
+  doc_type                           100.0%  (24/24)
+  doc_number                         100.0%  (15/15)
+  issue_date                         100.0%  (15/15)
+  seller.name                        100.0%  (15/15)
+  seller.vat_id                      100.0%  (15/15)
+  customer.name                      100.0%  (15/15)
+  line_items[].unit                  100.0%  (50/50)
+  line_items[].quantity              100.0%  (50/50)
+  line_items[].unit_price            100.0%  (50/50)

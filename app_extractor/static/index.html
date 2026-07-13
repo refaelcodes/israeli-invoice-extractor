@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Israeli Docs — Extractor</title>
+<style>
+  :root{
+    --bg:#f2f7f6; --panel:#fff; --ink:#122; --muted:#5f6b78; --line:#e2ebe9;
+    --accent:#0d9488; --accent2:#0369a1; --ok:#0a9d63; --okbg:#e8f7ef; --err:#d64545; --errbg:#fdecec;
+    --shadow:0 6px 24px rgba(15,50,45,.08); --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0c1417; --panel:#12201f; --ink:#e9f3f1; --muted:#93a4a3; --line:#20302e;
+      --okbg:#0e2a1f; --errbg:#2c1616; --shadow:0 8px 30px rgba(0,0,0,.35); }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  header{padding:20px 30px;display:flex;align-items:center;gap:16px;
+    background:linear-gradient(100deg,var(--accent),var(--accent2));color:#fff}
+  header .logo{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.18);
+    display:flex;align-items:center;justify-content:center;font-size:22px}
+  header h1{margin:0;font-size:20px} header p{margin:2px 0 0;font-size:13px;opacity:.9}
+  .modebar{margin-inline-start:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .seg{display:flex;background:rgba(255,255,255,.16);border-radius:10px;padding:3px}
+  .seg button{border:0;background:transparent;color:#fff;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
+  .seg button.on{background:#fff;color:var(--accent)}
+  .modebar select{padding:7px 10px;border-radius:9px;border:0;font-size:13px}
+  #langSel{background:rgba(255,255,255,.92);color:#222;cursor:pointer}
+  .wrap{max-width:1400px;margin:0 auto;padding:22px 30px}
+  .tabs{display:flex;gap:8px;margin-bottom:18px}
+  .tabs button{padding:10px 18px;border:1px solid var(--line);background:var(--panel);color:var(--ink);
+    border-radius:10px;cursor:pointer;font-size:14px;font-weight:600}
+  .tabs button.on{background:linear-gradient(100deg,var(--accent),var(--accent2));color:#fff;border-color:transparent}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+  .grid2{display:grid;grid-template-columns:380px 1fr;gap:20px}
+  @media(max-width:920px){.grid2{grid-template-columns:1fr}}
+  h2{margin:0 0 12px;font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+  select.big,input.big{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);font-size:14px}
+  .picker-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;max-height:280px;overflow:auto}
+  .pick{border:1px solid var(--line);border-radius:9px;overflow:hidden;cursor:pointer}
+  .pick.sel{outline:2px solid var(--accent)}
+  .pick img{width:100%;aspect-ratio:1/1.3;object-fit:cover;object-position:top;display:block;background:#fff}
+  .pick .pid{font-size:10px;padding:3px 5px;color:var(--muted);font-family:ui-monospace,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .drop{margin-top:12px;border:2px dashed var(--line);border-radius:11px;padding:16px;text-align:center;color:var(--muted);font-size:13px;cursor:pointer}
+  .drop:hover{border-color:var(--accent)}
+  .preview{margin-top:12px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;max-height:340px;overflow:auto}
+  .preview img{width:100%;display:block}
+  button.go{margin-top:14px;width:100%;padding:12px;border:0;border-radius:11px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;background:linear-gradient(100deg,var(--accent),var(--accent2))}
+  button.go:disabled{opacity:.55;cursor:default}
+  .acc{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+  .acc .big{font-size:38px;font-weight:800}
+  .acc .lab{font-size:13px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:start;color:var(--muted);font-weight:600;padding:7px 8px;border-bottom:2px solid var(--line);font-size:11px;text-transform:uppercase}
+  td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;word-break:break-word}
+  tr.bad{background:var(--errbg)} tr.good td:first-child{border-inline-start:3px solid var(--ok)}
+  tr.bad td:first-child{border-inline-start:3px solid var(--err)}
+  .path{font-family:ui-monospace,monospace;font-size:11.5px;color:var(--muted);direction:ltr}
+  .val{unicode-bidi:plaintext}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:99px}
+  .dot.ok{background:var(--ok)} .dot.no{background:var(--err)}
+  .muted{color:var(--muted)} .hidden{display:none}
+  pre.json{font-family:ui-monospace,monospace;font-size:12.5px;white-space:pre-wrap;word-break:break-word;
+    background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;margin:0;direction:ltr}
+  .json .k{color:var(--accent2)} .json .s{color:var(--ok)} .json .n{color:var(--accent)} .json .b{color:#c2410c}
+  .progress{height:10px;background:var(--bg);border-radius:99px;overflow:hidden;margin:14px 0 8px;border:1px solid var(--line)}
+  .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .2s}
+  .log{font-family:ui-monospace,monospace;font-size:12px;color:var(--muted);max-height:200px;overflow:auto;background:var(--bg);border-radius:9px;padding:10px;border:1px solid var(--line);white-space:pre-wrap;direction:ltr}
+  .warn{background:var(--errbg);color:var(--err);border-radius:9px;padding:8px 12px;font-size:12px;margin-top:8px}
+  .valok{background:var(--okbg);color:var(--ok);border-radius:10px;padding:10px 13px;font-size:13px;font-weight:600;margin-bottom:14px}
+  .valbad{border-radius:10px;padding:10px 13px;font-size:13px;margin-bottom:14px;
+    background:var(--errbg);color:var(--err);border:1px solid currentColor}
+  .valbad.amber{background:#fff7e6;color:#a86500}
+  @media (prefers-color-scheme: dark){ .valbad.amber{background:#2a2109;color:#e0a83a} }
+  .valbad ul{margin:8px 0 0;padding-inline-start:20px}
+  .valbad li{margin:4px 0}
+  .valbad .fl{font-family:ui-monospace,monospace;font-size:11px;opacity:.75;direction:ltr;unicode-bidi:embed}
+  .pdoc{display:flex;justify-content:space-between;padding:6px 8px;border-bottom:1px solid var(--line);font-size:13px}
+  .pdoc .id{font-family:ui-monospace,monospace}
+  .spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:99px;animation:sp .7s linear infinite;vertical-align:-2px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🔍</div>
+  <div><h1 data-i18n="h1">Экстрактор данных</h1><p data-i18n="sub">Vision-LLM извлечение + сверка с ground-truth по полям</p></div>
+  <div class="modebar">
+    <div class="seg" id="modeSeg"></div>
+    <select id="modelSel" title="model"></select>
+    <select id="langSel">
+      <option value="en">English</option><option value="he">עברית</option><option value="ru">Русский</option>
+    </select>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="warnBox"></div>
+  <div class="tabs">
+    <button class="on" data-tab="single" data-i18n="tabSingle">Один документ</button>
+    <button data-tab="batch" data-i18n="tabBatch">Батч по датасету</button>
+  </div>
+
+  <div id="tab-single" class="grid2">
+    <div class="card">
+      <h2 data-i18n="sourceH">Источник</h2>
+      <select class="big" id="docSel"><option value=""></option></select>
+      <div class="picker-grid" id="picker"></div>
+      <div class="drop" id="drop"><span id="dropText" data-i18n="dropText">⬆ или перетащите/выберите свой файл (PNG · PDF · JPG)</span>
+        <input type="file" id="fileInput" accept=".png,.pdf,.jpg,.jpeg" class="hidden"></div>
+      <div class="preview hidden" id="previewBox"><img id="previewImg" alt=""></div>
+      <button class="go" id="extractBtn" data-i18n="extractBtn" disabled>Извлечь данные</button>
+    </div>
+    <div class="card" id="resultCard">
+      <h2 data-i18n="resultH">Результат сверки</h2>
+      <div class="muted" id="resultEmpty" data-i18n="resultEmpty">Выберите документ из датасета или загрузите файл.</div>
+      <div id="resultBody" class="hidden">
+        <div id="valBox"></div>
+        <div class="acc" id="accBox"></div>
+        <div id="cmpWrap"></div>
+        <div id="jsonWrap"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-batch" class="card hidden">
+    <h2 data-i18n="batchH">Прогон всего датасета</h2>
+    <div class="muted" data-i18n="batchSub">Извлекает все PNG датасета в текущем режиме.</div>
+    <button class="go" id="batchBtn" data-i18n="batchBtn" style="max-width:280px">Запустить батч</button>
+    <div class="progress"><div class="bar" id="bbar"></div></div>
+    <div class="log" id="blog" data-i18n="ready">Готов.</div>
+    <div id="batchReport" class="hidden" style="margin-top:16px">
+      <div class="acc" id="baccBox"></div>
+      <div class="grid2">
+        <div><h2 data-i18n="perDocH">По документам</h2><div id="bperdoc"></div></div>
+        <div><h2 data-i18n="weakH">Слабейшие поля</h2><table id="bweak"><thead><tr><th data-i18n="thField">Поле</th><th data-i18n="thAcc">Точность</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let CFG={}, SELECTED=null, UPLOAD=null, LAST=null, LASTREPORT=null;
+let LANG=localStorage.getItem('ui_lang')||'ru';
+
+const I18N={
+  en:{docTitle:"Israeli Docs — Extractor", h1:"Data Extractor",
+    sub:"Vision-LLM extraction + field-by-field comparison with ground-truth",
+    tabSingle:"Single document", tabBatch:"Dataset batch", sourceH:"Source",
+    selectDataset:"— pick from dataset —", dropText:"⬆ or drag/select your own file (PNG · PDF · JPG)",
+    extractBtn:"Extract data", extracting:"Extracting…", resultH:"Comparison result",
+    resultEmpty:"Pick a dataset document (with comparison) or upload your own file.",
+    batchH:"Run over the whole dataset", batchSub:"Extracts every dataset PNG in the current mode and scores field accuracy.",
+    batchBtn:"Run batch", ready:"Ready.", thField:"Field", thTruth:"Ground-truth", thPred:"Extracted",
+    perDocH:"By document", weakH:"Weakest fields", thAcc:"Accuracy",
+    accMatched:(c,tt)=>`matched ${c} of ${tt} fields`, modeLine:(m,md)=>`mode ${m} · ${md}`,
+    uploadLine:(f,m,md)=>`File ${f||''} · mode ${m} · ${md}`, noTruth:"No ground-truth — showing extracted JSON.",
+    overallLabel:"overall accuracy", overallSub:(d,f)=>`${d} documents · ${f} fields`,
+    bStart:n=>`Batch start: ${n} PNG`, bDoc:(ok,i,n,id)=>`[${i}/${n}] ${ok?'OK':'FAIL'} ${id}`,
+    bDone:a=>`Done. Accuracy: ${a}%`, errPrefix:"Error: ",
+    vOk:"✓ Document arithmetic checks out", vTitle:n=>`⚠ Arithmetic inconsistencies: ${n} — needs review`,
+    vExpected:"expected", vGot:"computed",
+    codes:{LINE_ITEMS_SUM:"Sum of line items ≠ subtotal", VAT_TOTAL:"subtotal + VAT ≠ total",
+      VAT_RATE_CALC:"subtotal × VAT rate ≠ VAT amount", LINE_ITEM_MATH:"quantity × unit price ≠ line total",
+      PAYSLIP_NET:"gross − deductions ≠ net pay", EARNINGS_SUM:"Sum of earnings ≠ gross",
+      DEDUCTIONS_SUM:"Sum of deductions ≠ total deductions",
+      CLOSING_BALANCE:"Last transaction balance ≠ closing balance",
+      ALLOCATION_MISSING:"Allocation number (מספר הקצאה) missing above threshold",
+      NO_AMOUNTS:"No monetary values extracted — image likely too small/blurry",
+      TOTAL_NO_VAT:"No VAT on document, yet total ≠ subtotal"}},
+  he:{docTitle:"Israeli Docs — מחלץ", h1:"מחלץ נתונים",
+    sub:"חילוץ Vision-LLM + השוואת שדות מול אמת ייחוס",
+    tabSingle:"מסמך יחיד", tabBatch:"אצוות דאטהסט", sourceH:"מקור",
+    selectDataset:"— בחרו מהדאטהסט —", dropText:"⬆ או גררו/בחרו קובץ משלכם (PNG · PDF · JPG)",
+    extractBtn:"חלץ נתונים", extracting:"מחלץ…", resultH:"תוצאת השוואה",
+    resultEmpty:"בחרו מסמך מהדאטהסט (עם השוואה) או העלו קובץ משלכם.",
+    batchH:"הרצה על כל הדאטהסט", batchSub:"מחלץ כל PNG בדאטהסט במצב הנוכחי ומחשב דיוק לפי שדות.",
+    batchBtn:"הרץ אצווה", ready:"מוכן.", thField:"שדה", thTruth:"אמת ייחוס", thPred:"חולץ",
+    perDocH:"לפי מסמך", weakH:"השדות החלשים", thAcc:"דיוק",
+    accMatched:(c,tt)=>`תואמו ${c} מתוך ${tt} שדות`, modeLine:(m,md)=>`מצב ${m} · ${md}`,
+    uploadLine:(f,m,md)=>`קובץ ${f||''} · מצב ${m} · ${md}`, noTruth:"אין אמת ייחוס — מוצג ה-JSON שחולץ.",
+    overallLabel:"דיוק כולל", overallSub:(d,f)=>`${d} מסמכים · ${f} שדות`,
+    bStart:n=>`תחילת אצווה: ${n} PNG`, bDoc:(ok,i,n,id)=>`[${i}/${n}] ${ok?'OK':'FAIL'} ${id}`,
+    bDone:a=>`הסתיים. דיוק: ${a}%`, errPrefix:"שגיאה: ",
+    vOk:"✓ החשבון האריתמטי של המסמך מסתדר", vTitle:n=>`⚠ אי-התאמות אריתמטיות: ${n} — נדרשת בדיקה`,
+    vExpected:"צפוי", vGot:"חושב",
+    codes:{LINE_ITEMS_SUM:"סכום השורות ≠ סכום ביניים", VAT_TOTAL:"סכום ביניים + מע\"מ ≠ סה\"כ",
+      VAT_RATE_CALC:"סכום ביניים × שיעור מע\"מ ≠ סכום מע\"מ", LINE_ITEM_MATH:"כמות × מחיר יחידה ≠ סה\"כ שורה",
+      PAYSLIP_NET:"ברוטו − ניכויים ≠ נטו", EARNINGS_SUM:"סכום התשלומים ≠ ברוטו",
+      DEDUCTIONS_SUM:"סכום הניכויים ≠ סה\"כ ניכויים",
+      CLOSING_BALANCE:"יתרת התנועה האחרונה ≠ יתרת סגירה",
+      ALLOCATION_MISSING:"חסר מספר הקצאה מעל הסף",
+      NO_AMOUNTS:"לא חולצו סכומים — התמונה כנראה קטנה/מטושטשת מדי",
+      TOTAL_NO_VAT:"אין מע\"מ במסמך, אך סה\"כ ≠ סכום ביניים"}},
+  ru:{docTitle:"Israeli Docs — Экстрактор", h1:"Экстрактор данных",
+    sub:"Vision-LLM извлечение + сверка с ground-truth по полям",
+    tabSingle:"Один документ", tabBatch:"Батч по датасету", sourceH:"Источник",
+    selectDataset:"— выбрать из датасета —", dropText:"⬆ или перетащите/выберите свой файл (PNG · PDF · JPG)",
+    extractBtn:"Извлечь данные", extracting:"Извлечение…", resultH:"Результат сверки",
+    resultEmpty:"Выберите документ из датасета (со сверкой) или загрузите свой файл.",
+    batchH:"Прогон всего датасета", batchSub:"Извлекает все PNG датасета в текущем режиме и считает точность по полям.",
+    batchBtn:"Запустить батч", ready:"Готов.", thField:"Поле", thTruth:"Ground-truth", thPred:"Извлечено",
+    perDocH:"По документам", weakH:"Слабейшие поля", thAcc:"Точность",
+    accMatched:(c,tt)=>`совпало ${c} из ${tt} полей`, modeLine:(m,md)=>`режим ${m} · ${md}`,
+    uploadLine:(f,m,md)=>`Файл ${f||''} · режим ${m} · ${md}`, noTruth:"Ground-truth нет — показан извлечённый JSON.",
+    overallLabel:"общая точность", overallSub:(d,f)=>`${d} документов · ${f} полей`,
+    bStart:n=>`Старт батча: ${n} PNG`, bDoc:(ok,i,n,id)=>`[${i}/${n}] ${ok?'OK':'FAIL'} ${id}`,
+    bDone:a=>`Готово. Точность: ${a}%`, errPrefix:"Ошибка: ",
+    vOk:"✓ Арифметика документа сходится", vTitle:n=>`⚠ Арифметических расхождений: ${n} — нужна проверка`,
+    vExpected:"в документе", vGot:"посчитано",
+    codes:{LINE_ITEMS_SUM:"Сумма позиций ≠ subtotal", VAT_TOTAL:"subtotal + НДС ≠ total",
+      VAT_RATE_CALC:"subtotal × ставка НДС ≠ сумма НДС", LINE_ITEM_MATH:"кол-во × цена ≠ сумма строки",
+      PAYSLIP_NET:"брутто − удержания ≠ нетто", EARNINGS_SUM:"Сумма начислений ≠ брутто",
+      DEDUCTIONS_SUM:"Сумма удержаний ≠ всего удержаний",
+      CLOSING_BALANCE:"Баланс последней операции ≠ closing_balance",
+      ALLOCATION_MISSING:"Нет מספר הקצאה при сумме выше порога",
+      NO_AMOUNTS:"Не извлечено ни одной суммы — изображение слишком мелкое/размытое",
+      TOTAL_NO_VAT:"НДС в документе нет, но total ≠ subtotal"}},
+};
+const t=(k,...a)=>{ const v=(I18N[LANG]||I18N.ru)[k]; return typeof v==='function'?v(...a):v; };
+
+function applyLang(lang){
+  LANG=lang; localStorage.setItem('ui_lang',lang);
+  document.documentElement.lang=lang;
+  document.documentElement.dir=(lang==='he')?'rtl':'ltr';
+  document.title=t('docTitle');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ const s=t(el.dataset.i18n); if(s!=null) el.textContent=s; });
+  $('#langSel').value=lang;
+  const opt0=$('#docSel').querySelector('option[value=""]'); if(opt0) opt0.textContent=t('selectDataset');
+  if(!UPLOAD) $('#dropText').textContent=t('dropText');
+  if(LAST) renderResult(LAST);
+  if(LASTREPORT) renderReport(LASTREPORT);
+}
+
+function jsonHighlight(obj){
+  const j=JSON.stringify(obj,null,2);
+  return j.replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/"(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?/g,m=>/:$/.test(m)?'<span class="k">'+m+'</span>':'<span class="s">'+m+'</span>')
+    .replace(/\b(-?\d+\.?\d*)\b/g,'<span class="n">$1</span>')
+    .replace(/\b(true|false|null)\b/g,'<span class="b">$1</span>');
+}
+function fmtVal(v){ if(v===null||v===undefined) return '<span class="muted">—</span>';
+  return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function accColor(a){ return a>=0.95?'var(--ok)':a>=0.8?'#c98a00':'var(--err)'; }
+
+async function loadConfig(){
+  CFG=await (await fetch('/api/config')).json();
+  $('#modeSeg').innerHTML=CFG.valid_modes.map(m=>`<button data-m="${m}" class="${m===CFG.ai_mode?'on':''}">${m.toUpperCase()}</button>`).join('');
+  $('#modelSel').innerHTML=CFG.valid_models.map(m=>`<option ${m===CFG.model?'selected':''}>${m}</option>`).join('');
+  $$('#modeSeg button').forEach(b=>b.onclick=()=>saveConfig({ai_mode:b.dataset.m}));
+  $('#modelSel').onchange=()=>saveConfig({model:$('#modelSel').value});
+  $('#warnBox').innerHTML=(CFG.warnings||[]).map(w=>`<div class="warn">⚠ ${w}</div>`).join('');
+}
+async function saveConfig(patch){
+  await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)});
+  await loadConfig();
+}
+async function loadDataset(){
+  const d=await (await fetch('/api/dataset')).json();
+  $('#docSel').innerHTML=`<option value="">${t('selectDataset')}</option>`+
+    d.items.map(i=>`<option value="${i.id}">${i.id}  ·  ${i.doc_type}</option>`).join('');
+  $('#picker').innerHTML=d.items.map(i=>`
+    <div class="pick" data-id="${i.id}" data-png="${i.png}">
+      <img loading="lazy" src="/api/file?path=${encodeURIComponent(i.png)}">
+      <div class="pid">${i.id}</div></div>`).join('');
+  $$('#picker .pick').forEach(p=>p.onclick=()=>selectDoc(p.dataset.id,p.dataset.png));
+}
+function selectDoc(id,png){
+  SELECTED=id; UPLOAD=null; $('#docSel').value=id;
+  $$('#picker .pick').forEach(p=>p.classList.toggle('sel',p.dataset.id===id));
+  $('#dropText').textContent=t('dropText');
+  $('#previewBox').classList.remove('hidden');
+  $('#previewImg').src='/api/file?path='+encodeURIComponent(png);
+  $('#extractBtn').disabled=false;
+}
+$('#docSel').onchange=e=>{ const i=e.target.value; if(!i){$('#extractBtn').disabled=true;return;}
+  const p=$(`#picker .pick[data-id="${i}"]`); selectDoc(i,p.dataset.png); };
+
+$('#drop').onclick=()=>$('#fileInput').click();
+$('#fileInput').onchange=e=>{ if(e.target.files[0]) setUpload(e.target.files[0]); };
+$('#drop').ondragover=e=>{e.preventDefault();};
+$('#drop').ondrop=e=>{e.preventDefault(); if(e.dataTransfer.files[0]) setUpload(e.dataTransfer.files[0]);};
+function setUpload(f){ UPLOAD=f; SELECTED=null; $('#docSel').value='';
+  $$('#picker .pick').forEach(p=>p.classList.remove('sel'));
+  $('#extractBtn').disabled=false; $('#previewBox').classList.remove('hidden');
+  if(f.type.startsWith('image/')){ const r=new FileReader(); r.onload=()=>$('#previewImg').src=r.result; r.readAsDataURL(f); }
+  else { $('#previewImg').removeAttribute('src'); }
+  $('#dropText').textContent='📄 '+f.name; }
+
+$('#extractBtn').onclick=async()=>{
+  const btn=$('#extractBtn'); btn.disabled=true;
+  btn.innerHTML='<span class="spin"></span> '+t('extracting');
+  try{
+    let res;
+    if(UPLOAD){ const fd=new FormData(); fd.append('file',UPLOAD);
+      res=await (await fetch('/api/extract-upload',{method:'POST',body:fd})).json(); }
+    else{ res=await (await fetch('/api/extract-doc',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({id:SELECTED})})).json(); }
+    LAST=res; renderResult(res);
+  }catch(err){ alert(t('errPrefix')+err); }
+  finally{ btn.textContent=t('extractBtn'); btn.disabled=false; }
+};
+
+function renderValidation(v){
+  const box=$('#valBox');
+  if(!v){ box.innerHTML=''; return; }
+  if(!v.issues || !v.issues.length){ box.innerHTML=`<div class="valok">${t('vOk')}</div>`; return; }
+  const codes=t('codes');
+  const NO_NUMS=new Set(['ALLOCATION_MISSING','NO_AMOUNTS']);  // числа для этих кодов бессмысленны
+  const items=v.issues.map(i=>{
+    const label=codes[i.code]||i.code;
+    const nums=NO_NUMS.has(i.code)?'':
+      ` — ${t('vExpected')} <b>${i.expected}</b>, ${t('vGot')} <b>${i.got}</b>`;
+    return `<li>${label}${nums} <span class="fl">${(i.fields||[]).join(', ')}</span></li>`;
+  }).join('');
+  const amber = v.errors===0 ? ' amber' : '';
+  box.innerHTML=`<div class="valbad${amber}">${t('vTitle',v.issues.length)}<ul>${items}</ul></div>`;
+}
+
+function renderResult(res){
+  $('#resultEmpty').classList.add('hidden'); $('#resultBody').classList.remove('hidden');
+  renderValidation(res.validation);
+  const c=res.comparison;
+  if(c){
+    $('#accBox').innerHTML=`<div class="big" style="color:${accColor(c.accuracy)}">${(100*c.accuracy).toFixed(1)}%</div>
+      <div class="lab">${t('accMatched',c.correct,c.total)}<br>${t('modeLine',res.mode.toUpperCase(),res.model)}</div>`;
+    const rows=c.fields.map(f=>`<tr class="${f.ok?'good':'bad'}">
+      <td><span class="path">${f.path}</span></td>
+      <td class="val">${fmtVal(f.truth)}</td>
+      <td class="val">${fmtVal(f.pred)}</td>
+      <td><span class="dot ${f.ok?'ok':'no'}"></span></td></tr>`).join('');
+    $('#cmpWrap').innerHTML=`<table><thead><tr><th>${t('thField')}</th><th>${t('thTruth')}</th><th>${t('thPred')}</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+    $('#jsonWrap').innerHTML='';
+  }else{
+    $('#accBox').innerHTML=`<div class="lab">${t('uploadLine',res.filename,res.mode.toUpperCase(),res.model)}<br>${t('noTruth')}</div>`;
+    $('#cmpWrap').innerHTML='';
+    $('#jsonWrap').innerHTML='<pre class="json">'+jsonHighlight(res.predicted)+'</pre>';
+  }
+}
+
+$$('.tabs button').forEach(b=>b.onclick=()=>{
+  $$('.tabs button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  $('#tab-single').classList.toggle('hidden',b.dataset.tab!=='single');
+  $('#tab-batch').classList.toggle('hidden',b.dataset.tab!=='batch');
+});
+
+$('#batchBtn').onclick=()=>{
+  $('#batchBtn').disabled=true; $('#bbar').style.width='0'; $('#blog').textContent=''; $('#batchReport').classList.add('hidden');
+  const es=new EventSource('/api/batch');
+  es.onmessage=ev=>{
+    const e=JSON.parse(ev.data);
+    if(e.total&&e.current!=null) $('#bbar').style.width=(100*e.current/e.total)+'%';
+    let line='';
+    if(e.stage==='start') line=t('bStart',e.total);
+    else if(e.stage==='doc') line=t('bDoc',e.ok,e.current,e.total,e.id);
+    else if(e.stage==='done') { /* итог покажем на report */ }
+    else if(e.stage==='error') line=e.message||'error';
+    if(line){ $('#blog').textContent+=line+'\n'; $('#blog').scrollTop=$('#blog').scrollHeight; }
+    if(e.stage==='report'){ LASTREPORT=e.report; renderReport(e.report);
+      $('#blog').textContent+=t('bDone',(100*e.report.overall_accuracy).toFixed(1))+'\n'; }
+    if(e.stage==='report'||e.stage==='error'){ es.close(); $('#batchBtn').disabled=false; }
+  };
+  es.onerror=()=>{ es.close(); $('#batchBtn').disabled=false; };
+};
+function renderReport(r){
+  $('#batchReport').classList.remove('hidden');
+  $('#baccBox').innerHTML=`<div class="big" style="color:${accColor(r.overall_accuracy)}">${(100*r.overall_accuracy).toFixed(1)}%</div>
+    <div class="lab">${t('overallLabel')} · ${t('overallSub',r.docs_checked,r.fields_total)}</div>`;
+  $('#bperdoc').innerHTML=r.per_doc.map(d=>`<div class="pdoc"><span class="id">${d.id}</span>
+    <span style="color:${d.accuracy==null?'var(--muted)':accColor(d.accuracy)}">${d.accuracy==null?'—':(100*d.accuracy).toFixed(1)+'%'}</span></div>`).join('');
+  $('#bweak tbody').innerHTML=r.weakest_fields.slice(0,12).map(w=>`<tr><td class="path">${w.field}</td>
+    <td style="color:${accColor(w.accuracy)}">${(100*w.accuracy).toFixed(1)}% <span class="muted">(${w.correct}/${w.total})</span></td></tr>`).join('');
+}
+
+$('#langSel').onchange=e=>applyLang(e.target.value);
+(async()=>{ await loadConfig(); await loadDataset(); applyLang(LANG); })();
+</script>
+</body>
+</html>

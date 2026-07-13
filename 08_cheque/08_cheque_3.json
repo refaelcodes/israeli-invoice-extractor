@@ -1,0 +1,22 @@
+{
+  "id": "08_cheque_3",
+  "files": {
+    "pdf": "08_cheque/08_cheque_3.pdf",
+    "png": "08_cheque/08_cheque_3.png"
+  },
+  "fields": {
+    "doc_type": "שיק",
+    "bank": "בנק דיסקונט",
+    "bank_code": "11",
+    "branch": 213,
+    "account_number": 694330,
+    "cheque_number": 9155,
+    "date": "04/06/2026",
+    "payer": "אור מזרחי",
+    "payee": "סחר גמא בע\"מ",
+    "currency": "ILS",
+    "amount": 850.0,
+    "amount_words": "שמונה מאות חמישים שקלים חדשים",
+    "micr": "9155-11-213-694330"
+  }
+}

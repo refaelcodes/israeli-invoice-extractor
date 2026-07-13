@@ -1,0 +1,50 @@
+{
+  "id": "04_receipt_3",
+  "files": {
+    "pdf": "04_receipt/04_receipt_3.pdf",
+    "png": "04_receipt/04_receipt_3.png"
+  },
+  "fields": {
+    "doc_type": "קבלה",
+    "doc_number": 32265,
+    "issue_date": "31/12/2025",
+    "seller": {
+      "name": "אבטחת מידע וויז בע\"מ",
+      "vat_id": "709879795"
+    },
+    "customer": {
+      "name": "יעקב שפירא",
+      "id": "932806383"
+    },
+    "line_items": [
+      {
+        "description": "הטמעת מערכת CRM",
+        "unit": "פרויקט",
+        "quantity": 2,
+        "unit_price": 600,
+        "line_total": 1200
+      },
+      {
+        "description": "שירותי אינטגרציה",
+        "unit": "שעה",
+        "quantity": 1,
+        "unit_price": 850,
+        "line_total": 850
+      },
+      {
+        "description": "הטמעת מערכת CRM",
+        "unit": "פרויקט",
+        "quantity": 12,
+        "unit_price": 1200,
+        "line_total": 14400
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 16450,
+    "vat_rate": 0.18,
+    "vat_amount": 2961.0,
+    "total": 19411.0,
+    "allocation_number": null,
+    "is_paid": true
+  }
+}

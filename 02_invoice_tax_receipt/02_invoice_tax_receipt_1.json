@@ -1,0 +1,50 @@
+{
+  "id": "02_invoice_tax_receipt_1",
+  "files": {
+    "pdf": "02_invoice_tax_receipt/02_invoice_tax_receipt_1.pdf",
+    "png": "02_invoice_tax_receipt/02_invoice_tax_receipt_1.png"
+  },
+  "fields": {
+    "doc_type": "חשבונית מס / קבלה",
+    "doc_number": 48646,
+    "issue_date": "06/02/2026",
+    "seller": {
+      "name": "אחזקות גמא בע\"מ",
+      "vat_id": "506130608"
+    },
+    "customer": {
+      "name": "אחזקות וויז בע\"מ",
+      "id": "907606529"
+    },
+    "line_items": [
+      {
+        "description": "שירותי DevOps",
+        "unit": "חודש",
+        "quantity": 4,
+        "unit_price": 1200,
+        "line_total": 4800
+      },
+      {
+        "description": "אפיון ובינה עסקית",
+        "unit": "שעה",
+        "quantity": 1,
+        "unit_price": 220,
+        "line_total": 220
+      },
+      {
+        "description": "שירותי ייעוץ טכנולוגי",
+        "unit": "שעה",
+        "quantity": 10,
+        "unit_price": 600,
+        "line_total": 6000
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 11020,
+    "vat_rate": 0.18,
+    "vat_amount": 1983.6,
+    "total": 13003.6,
+    "allocation_number": "989333315",
+    "is_paid": true
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "id": "05_invoice_credit_2",
+  "files": {
+    "pdf": "05_invoice_credit/05_invoice_credit_2.pdf",
+    "png": "05_invoice_credit/05_invoice_credit_2.png"
+  },
+  "fields": {
+    "doc_type": "חשבונית זיכוי",
+    "doc_number": 85130,
+    "issue_date": "30/01/2026",
+    "seller": {
+      "name": "פתרונות גלובל בע\"מ",
+      "vat_id": "524952231"
+    },
+    "customer": {
+      "name": "יעקב אוחיון",
+      "id": "452062516"
+    },
+    "line_items": [
+      {
+        "description": "שירותי DevOps",
+        "unit": "חודש",
+        "quantity": 3,
+        "unit_price": 480,
+        "line_total": -1440
+      },
+      {
+        "description": "שירותי DevOps",
+        "unit": "חודש",
+        "quantity": 3,
+        "unit_price": 350,
+        "line_total": -1050
+      },
+      {
+        "description": "הדרכת צוות",
+        "unit": "מפגש",
+        "quantity": 3,
+        "unit_price": 150,
+        "line_total": -450
+      },
+      {
+        "description": "הטמעת מערכת CRM",
+        "unit": "פרויקט",
+        "quantity": 12,
+        "unit_price": 4200,
+        "line_total": -50400
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": -53340,
+    "vat_rate": 0.18,
+    "vat_amount": -9601.2,
+    "total": -62941.2,
+    "allocation_number": "115563535",
+    "is_paid": false
+  }
+}

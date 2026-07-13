@@ -1,0 +1,64 @@
+{
+  "id": "01_invoice_tax_1",
+  "files": {
+    "pdf": "01_invoice_tax/01_invoice_tax_1.pdf",
+    "png": "01_invoice_tax/01_invoice_tax_1.png"
+  },
+  "fields": {
+    "doc_type": "חשבונית מס",
+    "doc_number": 37212,
+    "issue_date": "26/09/2025",
+    "seller": {
+      "name": "לוגיסטיקה פרו בע\"מ",
+      "vat_id": "301102703"
+    },
+    "customer": {
+      "name": "ליאת אברהם",
+      "id": "606263408"
+    },
+    "line_items": [
+      {
+        "description": "שירותי אינטגרציה",
+        "unit": "שעה",
+        "quantity": 4,
+        "unit_price": 600,
+        "line_total": 2400
+      },
+      {
+        "description": "אפיון ובינה עסקית",
+        "unit": "שעה",
+        "quantity": 3,
+        "unit_price": 600,
+        "line_total": 1800
+      },
+      {
+        "description": "שירותי אינטגרציה",
+        "unit": "שעה",
+        "quantity": 5,
+        "unit_price": 850,
+        "line_total": 4250
+      },
+      {
+        "description": "רישיון תוכנה שנתי",
+        "unit": "יח'",
+        "quantity": 10,
+        "unit_price": 600,
+        "line_total": 6000
+      },
+      {
+        "description": "תחזוקת מערכות חודשית",
+        "unit": "חודש",
+        "quantity": 10,
+        "unit_price": 850,
+        "line_total": 8500
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 22950,
+    "vat_rate": 0.18,
+    "vat_amount": 4131.0,
+    "total": 27081.0,
+    "allocation_number": "136429430",
+    "is_paid": false
+  }
+}

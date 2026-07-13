@@ -1,0 +1,50 @@
+{
+  "id": "05_invoice_credit_1",
+  "files": {
+    "pdf": "05_invoice_credit/05_invoice_credit_1.pdf",
+    "png": "05_invoice_credit/05_invoice_credit_1.png"
+  },
+  "fields": {
+    "doc_type": "חשבונית זיכוי",
+    "doc_number": 79784,
+    "issue_date": "16/11/2025",
+    "seller": {
+      "name": "לוגיסטיקה וויז בע\"מ",
+      "vat_id": "634696017"
+    },
+    "customer": {
+      "name": "שירותי ענן טק בע\"מ",
+      "id": "563912005"
+    },
+    "line_items": [
+      {
+        "description": "הדרכת צוות",
+        "unit": "מפגש",
+        "quantity": 10,
+        "unit_price": 480,
+        "line_total": -4800
+      },
+      {
+        "description": "שירותי DevOps",
+        "unit": "חודש",
+        "quantity": 5,
+        "unit_price": 350,
+        "line_total": -1750
+      },
+      {
+        "description": "רישיון תוכנה שנתי",
+        "unit": "יח'",
+        "quantity": 8,
+        "unit_price": 480,
+        "line_total": -3840
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": -10390,
+    "vat_rate": 0.18,
+    "vat_amount": -1870.2,
+    "total": -12260.2,
+    "allocation_number": "039250570",
+    "is_paid": false
+  }
+}

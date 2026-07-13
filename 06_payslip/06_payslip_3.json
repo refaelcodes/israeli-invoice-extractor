@@ -1,0 +1,55 @@
+{
+  "id": "06_payslip_3",
+  "files": {
+    "pdf": "06_payslip/06_payslip_3.pdf",
+    "png": "06_payslip/06_payslip_3.png"
+  },
+  "fields": {
+    "doc_type": "תלוש שכר",
+    "period": "10/2025",
+    "employer": {
+      "name": "לוגיסטיקה נט בע\"מ",
+      "vat_id": "287824890"
+    },
+    "employee": {
+      "name": "יעל כהן",
+      "id": "643164874"
+    },
+    "currency": "ILS",
+    "earnings": [
+      {
+        "name": "שכר יסוד",
+        "amount": 16000
+      },
+      {
+        "name": "תוספת/בונוס",
+        "amount": 2000
+      },
+      {
+        "name": "החזר נסיעות",
+        "amount": 250
+      }
+    ],
+    "gross": 18250,
+    "deductions": [
+      {
+        "name": "מס הכנסה",
+        "amount": 3001
+      },
+      {
+        "name": "ביטוח לאומי",
+        "amount": 1278
+      },
+      {
+        "name": "מס בריאות",
+        "amount": 566
+      },
+      {
+        "name": "פנסיה (עובד)",
+        "amount": 1095
+      }
+    ],
+    "total_deductions": 5940,
+    "net_pay": 12310
+  }
+}

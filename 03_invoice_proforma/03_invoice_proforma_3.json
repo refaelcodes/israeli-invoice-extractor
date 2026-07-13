@@ -1,0 +1,43 @@
+{
+  "id": "03_invoice_proforma_3",
+  "files": {
+    "pdf": "03_invoice_proforma/03_invoice_proforma_3.pdf",
+    "png": "03_invoice_proforma/03_invoice_proforma_3.png"
+  },
+  "fields": {
+    "doc_type": "חשבונית עסקה",
+    "doc_number": 96905,
+    "issue_date": "12/12/2025",
+    "seller": {
+      "name": "סחר נט בע\"מ",
+      "vat_id": "156939860"
+    },
+    "customer": {
+      "name": "שירה רוזנברג",
+      "id": "331031112"
+    },
+    "line_items": [
+      {
+        "description": "פיתוח תוכנה בהזמנה",
+        "unit": "שעה",
+        "quantity": 8,
+        "unit_price": 4200,
+        "line_total": 33600
+      },
+      {
+        "description": "פיתוח תוכנה בהזמנה",
+        "unit": "שעה",
+        "quantity": 2,
+        "unit_price": 1200,
+        "line_total": 2400
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 36000,
+    "vat_rate": 0.18,
+    "vat_amount": 6480.0,
+    "total": 42480.0,
+    "allocation_number": null,
+    "is_paid": false
+  }
+}

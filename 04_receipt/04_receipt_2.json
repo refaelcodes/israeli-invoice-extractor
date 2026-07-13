@@ -1,0 +1,50 @@
+{
+  "id": "04_receipt_2",
+  "files": {
+    "pdf": "04_receipt/04_receipt_2.pdf",
+    "png": "04_receipt/04_receipt_2.png"
+  },
+  "fields": {
+    "doc_type": "קבלה",
+    "doc_number": 56241,
+    "issue_date": "07/06/2025",
+    "seller": {
+      "name": "מערכות מידע אלפא בע\"מ",
+      "vat_id": "996798054"
+    },
+    "customer": {
+      "name": "אחזקות טק בע\"מ",
+      "id": "455053264"
+    },
+    "line_items": [
+      {
+        "description": "שירותי DevOps",
+        "unit": "חודש",
+        "quantity": 8,
+        "unit_price": 2500,
+        "line_total": 20000
+      },
+      {
+        "description": "אפיון ובינה עסקית",
+        "unit": "שעה",
+        "quantity": 3,
+        "unit_price": 4200,
+        "line_total": 12600
+      },
+      {
+        "description": "הטמעת מערכת CRM",
+        "unit": "פרויקט",
+        "quantity": 10,
+        "unit_price": 850,
+        "line_total": 8500
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 41100,
+    "vat_rate": 0.18,
+    "vat_amount": 7398.0,
+    "total": 48498.0,
+    "allocation_number": null,
+    "is_paid": true
+  }
+}

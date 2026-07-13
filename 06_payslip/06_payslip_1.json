@@ -1,0 +1,55 @@
+{
+  "id": "06_payslip_1",
+  "files": {
+    "pdf": "06_payslip/06_payslip_1.pdf",
+    "png": "06_payslip/06_payslip_1.png"
+  },
+  "fields": {
+    "doc_type": "תלוש שכר",
+    "period": "01/2026",
+    "employer": {
+      "name": "שירותי ענן טק בע\"מ",
+      "vat_id": "968726547"
+    },
+    "employee": {
+      "name": "עומר פרץ",
+      "id": "889915195"
+    },
+    "currency": "ILS",
+    "earnings": [
+      {
+        "name": "שכר יסוד",
+        "amount": 28000
+      },
+      {
+        "name": "תוספת/בונוס",
+        "amount": 500
+      },
+      {
+        "name": "החזר נסיעות",
+        "amount": 400
+      }
+    ],
+    "gross": 28900,
+    "deductions": [
+      {
+        "name": "מס הכנסה",
+        "amount": 3726
+      },
+      {
+        "name": "ביטוח לאומי",
+        "amount": 2023
+      },
+      {
+        "name": "מס בריאות",
+        "amount": 896
+      },
+      {
+        "name": "פנסיה (עובד)",
+        "amount": 1734
+      }
+    ],
+    "total_deductions": 8379,
+    "net_pay": 20521
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "08_cheque_1",
+  "files": {
+    "pdf": "08_cheque/08_cheque_1.pdf",
+    "png": "08_cheque/08_cheque_1.png"
+  },
+  "fields": {
+    "doc_type": "שיק",
+    "bank": "בנק דיסקונט",
+    "bank_code": "11",
+    "branch": 386,
+    "account_number": 488690,
+    "cheque_number": 7597,
+    "date": "05/07/2026",
+    "payer": "טכנולוגיות גמא בע\"מ",
+    "payee": "הדס דהן",
+    "currency": "ILS",
+    "amount": 7250.0,
+    "amount_words": "שבעה אלף מאתיים חמישים שקלים חדשים",
+    "micr": "7597-11-386-488690"
+  }
+}

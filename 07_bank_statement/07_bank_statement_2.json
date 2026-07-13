@@ -1,0 +1,90 @@
+{
+  "id": "07_bank_statement_2",
+  "files": {
+    "pdf": "07_bank_statement/07_bank_statement_2.pdf",
+    "png": "07_bank_statement/07_bank_statement_2.png"
+  },
+  "fields": {
+    "doc_type": "דף חשבון בנק",
+    "bank": "הבנק הבינלאומי",
+    "bank_code": "31",
+    "branch": 514,
+    "account_number": 944310,
+    "account_holder": "רבקה רוזנברג",
+    "statement_date": "26/04/2026",
+    "currency": "ILS",
+    "transactions": [
+      {
+        "date": "01/05/2026",
+        "description": "החזר הלוואה",
+        "debit": null,
+        "credit": 2282.37,
+        "balance": 5902.22
+      },
+      {
+        "date": "03/05/2026",
+        "description": "הוראת קבע - חשמל",
+        "debit": null,
+        "credit": 151.52,
+        "balance": 6053.74
+      },
+      {
+        "date": "07/05/2026",
+        "description": "הוראת קבע - חשמל",
+        "debit": 466.67,
+        "credit": null,
+        "balance": 5587.07
+      },
+      {
+        "date": "09/05/2026",
+        "description": "הוראת קבע - ארנונה",
+        "debit": null,
+        "credit": 2584.5,
+        "balance": 8171.57
+      },
+      {
+        "date": "14/05/2026",
+        "description": "הפקדת שיק",
+        "debit": null,
+        "credit": 3923.17,
+        "balance": 12094.74
+      },
+      {
+        "date": "19/05/2026",
+        "description": "החזר הלוואה",
+        "debit": 2008.26,
+        "credit": null,
+        "balance": 10086.48
+      },
+      {
+        "date": "24/05/2026",
+        "description": "משיכת מזומן כספומט",
+        "debit": 1788.07,
+        "credit": null,
+        "balance": 8298.41
+      },
+      {
+        "date": "29/05/2026",
+        "description": "עמלת ניהול חשבון",
+        "debit": 3557.08,
+        "credit": null,
+        "balance": 4741.33
+      },
+      {
+        "date": "01/06/2026",
+        "description": "הוראת קבע - ארנונה",
+        "debit": 699.06,
+        "credit": null,
+        "balance": 4042.27
+      },
+      {
+        "date": "02/06/2026",
+        "description": "משיכת מזומן כספומט",
+        "debit": 2347.67,
+        "credit": null,
+        "balance": 1694.6
+      }
+    ],
+    "closing_balance": 1694.6
+  }
+}

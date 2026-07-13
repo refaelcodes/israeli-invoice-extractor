@@ -1,0 +1,11 @@
+{
+  "ai_mode": "mock",
+  "model": "claude-opus-4-8",
+  "extractor": {
+    "dataset_dir": ".",
+    "pred_dir": "pred",
+    "max_tokens": 4096,
+    "max_pages": 10,
+    "pdf_dpi": 150
+  }
+}

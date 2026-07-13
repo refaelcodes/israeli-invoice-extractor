@@ -1,0 +1,51 @@
+{
+  "id": "06_payslip_2",
+  "files": {
+    "pdf": "06_payslip/06_payslip_2.pdf",
+    "png": "06_payslip/06_payslip_2.png"
+  },
+  "fields": {
+    "doc_type": "תלוש שכר",
+    "period": "05/2026",
+    "employer": {
+      "name": "פתרונות טק בע\"מ",
+      "vat_id": "602940710"
+    },
+    "employee": {
+      "name": "טל חדד",
+      "id": "802823500"
+    },
+    "currency": "ILS",
+    "earnings": [
+      {
+        "name": "שכר יסוד",
+        "amount": 28000
+      },
+      {
+        "name": "החזר נסיעות",
+        "amount": 250
+      }
+    ],
+    "gross": 28250,
+    "deductions": [
+      {
+        "name": "מס הכנסה",
+        "amount": 2007
+      },
+      {
+        "name": "ביטוח לאומי",
+        "amount": 1978
+      },
+      {
+        "name": "מס בריאות",
+        "amount": 876
+      },
+      {
+        "name": "פנסיה (עובד)",
+        "amount": 1695
+      }
+    ],
+    "total_deductions": 6556,
+    "net_pay": 21694
+  }
+}

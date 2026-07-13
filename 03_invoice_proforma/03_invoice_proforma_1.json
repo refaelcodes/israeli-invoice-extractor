@@ -1,0 +1,57 @@
+{
+  "id": "03_invoice_proforma_1",
+  "files": {
+    "pdf": "03_invoice_proforma/03_invoice_proforma_1.pdf",
+    "png": "03_invoice_proforma/03_invoice_proforma_1.png"
+  },
+  "fields": {
+    "doc_type": "חשבונית עסקה",
+    "doc_number": 10736,
+    "issue_date": "28/10/2025",
+    "seller": {
+      "name": "שירותי ענן המרכז בע\"מ",
+      "vat_id": "132384868"
+    },
+    "customer": {
+      "name": "אבטחת מידע נט בע\"מ",
+      "id": "244318069"
+    },
+    "line_items": [
+      {
+        "description": "שירותי DevOps",
+        "unit": "חודש",
+        "quantity": 1,
+        "unit_price": 480,
+        "line_total": 480
+      },
+      {
+        "description": "הדרכת צוות",
+        "unit": "מפגש",
+        "quantity": 10,
+        "unit_price": 2500,
+        "line_total": 25000
+      },
+      {
+        "description": "תחזוקת מערכות חודשית",
+        "unit": "חודש",
+        "quantity": 5,
+        "unit_price": 480,
+        "line_total": 2400
+      },
+      {
+        "description": "הדרכת צוות",
+        "unit": "מפגש",
+        "quantity": 10,
+        "unit_price": 1200,
+        "line_total": 12000
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 39880,
+    "vat_rate": 0.18,
+    "vat_amount": 7178.4,
+    "total": 47058.4,
+    "allocation_number": null,
+    "is_paid": false
+  }
+}

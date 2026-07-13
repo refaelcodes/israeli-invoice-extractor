@@ -1,0 +1,57 @@
+{
+  "id": "01_invoice_tax_2",
+  "files": {
+    "pdf": "01_invoice_tax/01_invoice_tax_2.pdf",
+    "png": "01_invoice_tax/01_invoice_tax_2.png"
+  },
+  "fields": {
+    "doc_type": "חשבונית מס",
+    "doc_number": 65195,
+    "issue_date": "06/09/2025",
+    "seller": {
+      "name": "סחר המרכז בע\"מ",
+      "vat_id": "529352361"
+    },
+    "customer": {
+      "name": "פתרונות גלובל בע\"מ",
+      "id": "473438141"
+    },
+    "line_items": [
+      {
+        "description": "הטמעת מערכת CRM",
+        "unit": "פרויקט",
+        "quantity": 4,
+        "unit_price": 600,
+        "line_total": 2400
+      },
+      {
+        "description": "שירותי DevOps",
+        "unit": "חודש",
+        "quantity": 1,
+        "unit_price": 150,
+        "line_total": 150
+      },
+      {
+        "description": "שירותי DevOps",
+        "unit": "חודש",
+        "quantity": 1,
+        "unit_price": 2500,
+        "line_total": 2500
+      },
+      {
+        "description": "הדרכת צוות",
+        "unit": "מפגש",
+        "quantity": 4,
+        "unit_price": 480,
+        "line_total": 1920
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 6970,
+    "vat_rate": 0.18,
+    "vat_amount": 1254.6,
+    "total": 8224.6,
+    "allocation_number": "915492091",
+    "is_paid": false
+  }
+}

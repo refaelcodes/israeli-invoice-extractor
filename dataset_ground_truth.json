@@ -1,0 +1,1282 @@
+{
+  "count": 24,
+  "vat_rate": 0.18,
+  "allocation_threshold_ils": 5000,
+  "documents": [
+    {
+      "id": "01_invoice_tax_1",
+      "files": {
+        "pdf": "01_invoice_tax/01_invoice_tax_1.pdf",
+        "png": "01_invoice_tax/01_invoice_tax_1.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית מס",
+        "doc_number": 37212,
+        "issue_date": "26/09/2025",
+        "seller": {
+          "name": "לוגיסטיקה פרו בע\"מ",
+          "vat_id": "301102703"
+        },
+        "customer": {
+          "name": "ליאת אברהם",
+          "id": "606263408"
+        },
+        "line_items": [
+          {
+            "description": "שירותי אינטגרציה",
+            "unit": "שעה",
+            "quantity": 4,
+            "unit_price": 600,
+            "line_total": 2400
+          },
+          {
+            "description": "אפיון ובינה עסקית",
+            "unit": "שעה",
+            "quantity": 3,
+            "unit_price": 600,
+            "line_total": 1800
+          },
+          {
+            "description": "שירותי אינטגרציה",
+            "unit": "שעה",
+            "quantity": 5,
+            "unit_price": 850,
+            "line_total": 4250
+          },
+          {
+            "description": "רישיון תוכנה שנתי",
+            "unit": "יח'",
+            "quantity": 10,
+            "unit_price": 600,
+            "line_total": 6000
+          },
+          {
+            "description": "תחזוקת מערכות חודשית",
+            "unit": "חודש",
+            "quantity": 10,
+            "unit_price": 850,
+            "line_total": 8500
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 22950,
+        "vat_rate": 0.18,
+        "vat_amount": 4131.0,
+        "total": 27081.0,
+        "allocation_number": "136429430",
+        "is_paid": false
+      }
+    },
+    {
+      "id": "01_invoice_tax_2",
+      "files": {
+        "pdf": "01_invoice_tax/01_invoice_tax_2.pdf",
+        "png": "01_invoice_tax/01_invoice_tax_2.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית מס",
+        "doc_number": 65195,
+        "issue_date": "06/09/2025",
+        "seller": {
+          "name": "סחר המרכז בע\"מ",
+          "vat_id": "529352361"
+        },
+        "customer": {
+          "name": "פתרונות גלובל בע\"מ",
+          "id": "473438141"
+        },
+        "line_items": [
+          {
+            "description": "הטמעת מערכת CRM",
+            "unit": "פרויקט",
+            "quantity": 4,
+            "unit_price": 600,
+            "line_total": 2400
+          },
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 1,
+            "unit_price": 150,
+            "line_total": 150
+          },
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 1,
+            "unit_price": 2500,
+            "line_total": 2500
+          },
+          {
+            "description": "הדרכת צוות",
+            "unit": "מפגש",
+            "quantity": 4,
+            "unit_price": 480,
+            "line_total": 1920
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 6970,
+        "vat_rate": 0.18,
+        "vat_amount": 1254.6,
+        "total": 8224.6,
+        "allocation_number": "915492091",
+        "is_paid": false
+      }
+    },
+    {
+      "id": "01_invoice_tax_3",
+      "files": {
+        "pdf": "01_invoice_tax/01_invoice_tax_3.pdf",
+        "png": "01_invoice_tax/01_invoice_tax_3.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית מס",
+        "doc_number": 63164,
+        "issue_date": "15/12/2025",
+        "seller": {
+          "name": "תוכנה נט בע\"מ",
+          "vat_id": "995506573"
+        },
+        "customer": {
+          "name": "פתרונות ישראל בע\"מ",
+          "id": "908939622"
+        },
+        "line_items": [
+          {
+            "description": "פיתוח תוכנה בהזמנה",
+            "unit": "שעה",
+            "quantity": 10,
+            "unit_price": 480,
+            "line_total": 4800
+          },
+          {
+            "description": "אפיון ובינה עסקית",
+            "unit": "שעה",
+            "quantity": 1,
+            "unit_price": 350,
+            "line_total": 350
+          },
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 12,
+            "unit_price": 2500,
+            "line_total": 30000
+          },
+          {
+            "description": "פיתוח תוכנה בהזמנה",
+            "unit": "שעה",
+            "quantity": 12,
+            "unit_price": 220,
+            "line_total": 2640
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 37790,
+        "vat_rate": 0.18,
+        "vat_amount": 6802.2,
+        "total": 44592.2,
+        "allocation_number": "065645239",
+        "is_paid": false
+      }
+    },
+    {
+      "id": "02_invoice_tax_receipt_1",
+      "files": {
+        "pdf": "02_invoice_tax_receipt/02_invoice_tax_receipt_1.pdf",
+        "png": "02_invoice_tax_receipt/02_invoice_tax_receipt_1.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית מס / קבלה",
+        "doc_number": 48646,
+        "issue_date": "06/02/2026",
+        "seller": {
+          "name": "אחזקות גמא בע\"מ",
+          "vat_id": "506130608"
+        },
+        "customer": {
+          "name": "אחזקות וויז בע\"מ",
+          "id": "907606529"
+        },
+        "line_items": [
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 4,
+            "unit_price": 1200,
+            "line_total": 4800
+          },
+          {
+            "description": "אפיון ובינה עסקית",
+            "unit": "שעה",
+            "quantity": 1,
+            "unit_price": 220,
+            "line_total": 220
+          },
+          {
+            "description": "שירותי ייעוץ טכנולוגי",
+            "unit": "שעה",
+            "quantity": 10,
+            "unit_price": 600,
+            "line_total": 6000
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 11020,
+        "vat_rate": 0.18,
+        "vat_amount": 1983.6,
+        "total": 13003.6,
+        "allocation_number": "989333315",
+        "is_paid": true
+      }
+    },
+    {
+      "id": "02_invoice_tax_receipt_2",
+      "files": {
+        "pdf": "02_invoice_tax_receipt/02_invoice_tax_receipt_2.pdf",
+        "png": "02_invoice_tax_receipt/02_invoice_tax_receipt_2.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית מס / קבלה",
+        "doc_number": 44757,
+        "issue_date": "25/09/2025",
+        "seller": {
+          "name": "טכנולוגיות נט בע\"מ",
+          "vat_id": "813802329"
+        },
+        "customer": {
+          "name": "נועה מזרחי",
+          "id": "968239772"
+        },
+        "line_items": [
+          {
+            "description": "שירותי אינטגרציה",
+            "unit": "שעה",
+            "quantity": 3,
+            "unit_price": 480,
+            "line_total": 1440
+          },
+          {
+            "description": "רישיון תוכנה שנתי",
+            "unit": "יח'",
+            "quantity": 1,
+            "unit_price": 1200,
+            "line_total": 1200
+          },
+          {
+            "description": "שירותי ייעוץ טכנולוגי",
+            "unit": "שעה",
+            "quantity": 4,
+            "unit_price": 220,
+            "line_total": 880
+          },
+          {
+            "description": "רישיון תוכנה שנתי",
+            "unit": "יח'",
+            "quantity": 1,
+            "unit_price": 4200,
+            "line_total": 4200
+          },
+          {
+            "description": "רישיון תוכנה שנתי",
+            "unit": "יח'",
+            "quantity": 3,
+            "unit_price": 600,
+            "line_total": 1800
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 9520,
+        "vat_rate": 0.18,
+        "vat_amount": 1713.6,
+        "total": 11233.6,
+        "allocation_number": "300327505",
+        "is_paid": true
+      }
+    },
+    {
+      "id": "02_invoice_tax_receipt_3",
+      "files": {
+        "pdf": "02_invoice_tax_receipt/02_invoice_tax_receipt_3.pdf",
+        "png": "02_invoice_tax_receipt/02_invoice_tax_receipt_3.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית מס / קבלה",
+        "doc_number": 54617,
+        "issue_date": "11/12/2025",
+        "seller": {
+          "name": "סחר ישראל בע\"מ",
+          "vat_id": "322398918"
+        },
+        "customer": {
+          "name": "סחר וויז בע\"מ",
+          "id": "117189308"
+        },
+        "line_items": [
+          {
+            "description": "הדרכת צוות",
+            "unit": "מפגש",
+            "quantity": 3,
+            "unit_price": 600,
+            "line_total": 1800
+          },
+          {
+            "description": "אחסון ענן",
+            "unit": "חודש",
+            "quantity": 1,
+            "unit_price": 480,
+            "line_total": 480
+          },
+          {
+            "description": "הדרכת צוות",
+            "unit": "מפגש",
+            "quantity": 1,
+            "unit_price": 350,
+            "line_total": 350
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 2630,
+        "vat_rate": 0.18,
+        "vat_amount": 473.4,
+        "total": 3103.4,
+        "allocation_number": null,
+        "is_paid": true
+      }
+    },
+    {
+      "id": "03_invoice_proforma_1",
+      "files": {
+        "pdf": "03_invoice_proforma/03_invoice_proforma_1.pdf",
+        "png": "03_invoice_proforma/03_invoice_proforma_1.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית עסקה",
+        "doc_number": 10736,
+        "issue_date": "28/10/2025",
+        "seller": {
+          "name": "שירותי ענן המרכז בע\"מ",
+          "vat_id": "132384868"
+        },
+        "customer": {
+          "name": "אבטחת מידע נט בע\"מ",
+          "id": "244318069"
+        },
+        "line_items": [
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 1,
+            "unit_price": 480,
+            "line_total": 480
+          },
+          {
+            "description": "הדרכת צוות",
+            "unit": "מפגש",
+            "quantity": 10,
+            "unit_price": 2500,
+            "line_total": 25000
+          },
+          {
+            "description": "תחזוקת מערכות חודשית",
+            "unit": "חודש",
+            "quantity": 5,
+            "unit_price": 480,
+            "line_total": 2400
+          },
+          {
+            "description": "הדרכת צוות",
+            "unit": "מפגש",
+            "quantity": 10,
+            "unit_price": 1200,
+            "line_total": 12000
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 39880,
+        "vat_rate": 0.18,
+        "vat_amount": 7178.4,
+        "total": 47058.4,
+        "allocation_number": null,
+        "is_paid": false
+      }
+    },
+    {
+      "id": "03_invoice_proforma_2",
+      "files": {
+        "pdf": "03_invoice_proforma/03_invoice_proforma_2.pdf",
+        "png": "03_invoice_proforma/03_invoice_proforma_2.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית עסקה",
+        "doc_number": 99286,
+        "issue_date": "25/09/2025",
+        "seller": {
+          "name": "ייעוץ טק בע\"מ",
+          "vat_id": "505891853"
+        },
+        "customer": {
+          "name": "אור דהן",
+          "id": "924775356"
+        },
+        "line_items": [
+          {
+            "description": "שירותי ייעוץ טכנולוגי",
+            "unit": "שעה",
+            "quantity": 1,
+            "unit_price": 480,
+            "line_total": 480
+          },
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 2,
+            "unit_price": 4200,
+            "line_total": 8400
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 8880,
+        "vat_rate": 0.18,
+        "vat_amount": 1598.4,
+        "total": 10478.4,
+        "allocation_number": null,
+        "is_paid": false
+      }
+    },
+    {
+      "id": "03_invoice_proforma_3",
+      "files": {
+        "pdf": "03_invoice_proforma/03_invoice_proforma_3.pdf",
+        "png": "03_invoice_proforma/03_invoice_proforma_3.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית עסקה",
+        "doc_number": 96905,
+        "issue_date": "12/12/2025",
+        "seller": {
+          "name": "סחר נט בע\"מ",
+          "vat_id": "156939860"
+        },
+        "customer": {
+          "name": "שירה רוזנברג",
+          "id": "331031112"
+        },
+        "line_items": [
+          {
+            "description": "פיתוח תוכנה בהזמנה",
+            "unit": "שעה",
+            "quantity": 8,
+            "unit_price": 4200,
+            "line_total": 33600
+          },
+          {
+            "description": "פיתוח תוכנה בהזמנה",
+            "unit": "שעה",
+            "quantity": 2,
+            "unit_price": 1200,
+            "line_total": 2400
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 36000,
+        "vat_rate": 0.18,
+        "vat_amount": 6480.0,
+        "total": 42480.0,
+        "allocation_number": null,
+        "is_paid": false
+      }
+    },
+    {
+      "id": "04_receipt_1",
+      "files": {
+        "pdf": "04_receipt/04_receipt_1.pdf",
+        "png": "04_receipt/04_receipt_1.png"
+      },
+      "fields": {
+        "doc_type": "קבלה",
+        "doc_number": 76856,
+        "issue_date": "09/06/2026",
+        "seller": {
+          "name": "דיגיטל וויז בע\"מ",
+          "vat_id": "619002405"
+        },
+        "customer": {
+          "name": "אבטחת מידע טק בע\"מ",
+          "id": "393401922"
+        },
+        "line_items": [
+          {
+            "description": "רישיון תוכנה שנתי",
+            "unit": "יח'",
+            "quantity": 5,
+            "unit_price": 600,
+            "line_total": 3000
+          },
+          {
+            "description": "שירותי אינטגרציה",
+            "unit": "שעה",
+            "quantity": 1,
+            "unit_price": 480,
+            "line_total": 480
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 3480,
+        "vat_rate": 0.18,
+        "vat_amount": 626.4,
+        "total": 4106.4,
+        "allocation_number": null,
+        "is_paid": true
+      }
+    },
+    {
+      "id": "04_receipt_2",
+      "files": {
+        "pdf": "04_receipt/04_receipt_2.pdf",
+        "png": "04_receipt/04_receipt_2.png"
+      },
+      "fields": {
+        "doc_type": "קבלה",
+        "doc_number": 56241,
+        "issue_date": "07/06/2025",
+        "seller": {
+          "name": "מערכות מידע אלפא בע\"מ",
+          "vat_id": "996798054"
+        },
+        "customer": {
+          "name": "אחזקות טק בע\"מ",
+          "id": "455053264"
+        },
+        "line_items": [
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 8,
+            "unit_price": 2500,
+            "line_total": 20000
+          },
+          {
+            "description": "אפיון ובינה עסקית",
+            "unit": "שעה",
+            "quantity": 3,
+            "unit_price": 4200,
+            "line_total": 12600
+          },
+          {
+            "description": "הטמעת מערכת CRM",
+            "unit": "פרויקט",
+            "quantity": 10,
+            "unit_price": 850,
+            "line_total": 8500
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 41100,
+        "vat_rate": 0.18,
+        "vat_amount": 7398.0,
+        "total": 48498.0,
+        "allocation_number": null,
+        "is_paid": true
+      }
+    },
+    {
+      "id": "04_receipt_3",
+      "files": {
+        "pdf": "04_receipt/04_receipt_3.pdf",
+        "png": "04_receipt/04_receipt_3.png"
+      },
+      "fields": {
+        "doc_type": "קבלה",
+        "doc_number": 32265,
+        "issue_date": "31/12/2025",
+        "seller": {
+          "name": "אבטחת מידע וויז בע\"מ",
+          "vat_id": "709879795"
+        },
+        "customer": {
+          "name": "יעקב שפירא",
+          "id": "932806383"
+        },
+        "line_items": [
+          {
+            "description": "הטמעת מערכת CRM",
+            "unit": "פרויקט",
+            "quantity": 2,
+            "unit_price": 600,
+            "line_total": 1200
+          },
+          {
+            "description": "שירותי אינטגרציה",
+            "unit": "שעה",
+            "quantity": 1,
+            "unit_price": 850,
+            "line_total": 850
+          },
+          {
+            "description": "הטמעת מערכת CRM",
+            "unit": "פרויקט",
+            "quantity": 12,
+            "unit_price": 1200,
+            "line_total": 14400
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": 16450,
+        "vat_rate": 0.18,
+        "vat_amount": 2961.0,
+        "total": 19411.0,
+        "allocation_number": null,
+        "is_paid": true
+      }
+    },
+    {
+      "id": "05_invoice_credit_1",
+      "files": {
+        "pdf": "05_invoice_credit/05_invoice_credit_1.pdf",
+        "png": "05_invoice_credit/05_invoice_credit_1.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית זיכוי",
+        "doc_number": 79784,
+        "issue_date": "16/11/2025",
+        "seller": {
+          "name": "לוגיסטיקה וויז בע\"מ",
+          "vat_id": "634696017"
+        },
+        "customer": {
+          "name": "שירותי ענן טק בע\"מ",
+          "id": "563912005"
+        },
+        "line_items": [
+          {
+            "description": "הדרכת צוות",
+            "unit": "מפגש",
+            "quantity": 10,
+            "unit_price": 480,
+            "line_total": -4800
+          },
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 5,
+            "unit_price": 350,
+            "line_total": -1750
+          },
+          {
+            "description": "רישיון תוכנה שנתי",
+            "unit": "יח'",
+            "quantity": 8,
+            "unit_price": 480,
+            "line_total": -3840
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": -10390,
+        "vat_rate": 0.18,
+        "vat_amount": -1870.2,
+        "total": -12260.2,
+        "allocation_number": "039250570",
+        "is_paid": false
+      }
+    },
+    {
+      "id": "05_invoice_credit_2",
+      "files": {
+        "pdf": "05_invoice_credit/05_invoice_credit_2.pdf",
+        "png": "05_invoice_credit/05_invoice_credit_2.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית זיכוי",
+        "doc_number": 85130,
+        "issue_date": "30/01/2026",
+        "seller": {
+          "name": "פתרונות גלובל בע\"מ",
+          "vat_id": "524952231"
+        },
+        "customer": {
+          "name": "יעקב אוחיון",
+          "id": "452062516"
+        },
+        "line_items": [
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 3,
+            "unit_price": 480,
+            "line_total": -1440
+          },
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 3,
+            "unit_price": 350,
+            "line_total": -1050
+          },
+          {
+            "description": "הדרכת צוות",
+            "unit": "מפגש",
+            "quantity": 3,
+            "unit_price": 150,
+            "line_total": -450
+          },
+          {
+            "description": "הטמעת מערכת CRM",
+            "unit": "פרויקט",
+            "quantity": 12,
+            "unit_price": 4200,
+            "line_total": -50400
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": -53340,
+        "vat_rate": 0.18,
+        "vat_amount": -9601.2,
+        "total": -62941.2,
+        "allocation_number": "115563535",
+        "is_paid": false
+      }
+    },
+    {
+      "id": "05_invoice_credit_3",
+      "files": {
+        "pdf": "05_invoice_credit/05_invoice_credit_3.pdf",
+        "png": "05_invoice_credit/05_invoice_credit_3.png"
+      },
+      "fields": {
+        "doc_type": "חשבונית זיכוי",
+        "doc_number": 87823,
+        "issue_date": "14/05/2026",
+        "seller": {
+          "name": "סחר גלובל בע\"מ",
+          "vat_id": "201414349"
+        },
+        "customer": {
+          "name": "סחר אלפא בע\"מ",
+          "id": "178345559"
+        },
+        "line_items": [
+          {
+            "description": "שירותי DevOps",
+            "unit": "חודש",
+            "quantity": 2,
+            "unit_price": 600,
+            "line_total": -1200
+          },
+          {
+            "description": "שירותי ייעוץ טכנולוגי",
+            "unit": "שעה",
+            "quantity": 1,
+            "unit_price": 350,
+            "line_total": -350
+          },
+          {
+            "description": "פיתוח תוכנה בהזמנה",
+            "unit": "שעה",
+            "quantity": 12,
+            "unit_price": 850,
+            "line_total": -10200
+          }
+        ],
+        "currency": "ILS",
+        "subtotal": -11750,
+        "vat_rate": 0.18,
+        "vat_amount": -2115.0,
+        "total": -13865.0,
+        "allocation_number": "358645306",
+        "is_paid": false
+      }
+    },
+    {
+      "id": "06_payslip_1",
+      "files": {
+        "pdf": "06_payslip/06_payslip_1.pdf",
+        "png": "06_payslip/06_payslip_1.png"
+      },
+      "fields": {
+        "doc_type": "תלוש שכר",
+        "period": "01/2026",
+        "employer": {
+          "name": "שירותי ענן טק בע\"מ",
+          "vat_id": "968726547"
+        },
+        "employee": {
+          "name": "עומר פרץ",
+          "id": "889915195"
+        },
+        "currency": "ILS",
+        "earnings": [
+          {
+            "name": "שכר יסוד",
+            "amount": 28000
+          },
+          {
+            "name": "תוספת/בונוס",
+            "amount": 500
+          },
+          {
+            "name": "החזר נסיעות",
+            "amount": 400
+          }
+        ],
+        "gross": 28900,
+        "deductions": [
+          {
+            "name": "מס הכנסה",
+            "amount": 3726
+          },
+          {
+            "name": "ביטוח לאומי",
+            "amount": 2023
+          },
+          {
+            "name": "מס בריאות",
+            "amount": 896
+          },
+          {
+            "name": "פנסיה (עובד)",
+            "amount": 1734
+          }
+        ],
+        "total_deductions": 8379,
+        "net_pay": 20521
+      }
+    },
+    {
+      "id": "06_payslip_2",
+      "files": {
+        "pdf": "06_payslip/06_payslip_2.pdf",
+        "png": "06_payslip/06_payslip_2.png"
+      },
+      "fields": {
+        "doc_type": "תלוש שכר",
+        "period": "05/2026",
+        "employer": {
+          "name": "פתרונות טק בע\"מ",
+          "vat_id": "602940710"
+        },
+        "employee": {
+          "name": "טל חדד",
+          "id": "802823500"
+        },
+        "currency": "ILS",
+        "earnings": [
+          {
+            "name": "שכר יסוד",
+            "amount": 28000
+          },
+          {
+            "name": "החזר נסיעות",
+            "amount": 250
+          }
+        ],
+        "gross": 28250,
+        "deductions": [
+          {
+            "name": "מס הכנסה",
+            "amount": 2007
+          },
+          {
+            "name": "ביטוח לאומי",
+            "amount": 1978
+          },
+          {
+            "name": "מס בריאות",
+            "amount": 876
+          },
+          {
+            "name": "פנסיה (עובד)",
+            "amount": 1695
+          }
+        ],
+        "total_deductions": 6556,
+        "net_pay": 21694
+      }
+    },
+    {
+      "id": "06_payslip_3",
+      "files": {
+        "pdf": "06_payslip/06_payslip_3.pdf",
+        "png": "06_payslip/06_payslip_3.png"
+      },
+      "fields": {
+        "doc_type": "תלוש שכר",
+        "period": "10/2025",
+        "employer": {
+          "name": "לוגיסטיקה נט בע\"מ",
+          "vat_id": "287824890"
+        },
+        "employee": {
+          "name": "יעל כהן",
+          "id": "643164874"
+        },
+        "currency": "ILS",
+        "earnings": [
+          {
+            "name": "שכר יסוד",
+            "amount": 16000
+          },
+          {
+            "name": "תוספת/בונוס",
+            "amount": 2000
+          },
+          {
+            "name": "החזר נסיעות",
+            "amount": 250
+          }
+        ],
+        "gross": 18250,
+        "deductions": [
+          {
+            "name": "מס הכנסה",
+            "amount": 3001
+          },
+          {
+            "name": "ביטוח לאומי",
+            "amount": 1278
+          },
+          {
+            "name": "מס בריאות",
+            "amount": 566
+          },
+          {
+            "name": "פנסיה (עובד)",
+            "amount": 1095
+          }
+        ],
+        "total_deductions": 5940,
+        "net_pay": 12310
+      }
+    },
+    {
+      "id": "07_bank_statement_1",
+      "files": {
+        "pdf": "07_bank_statement/07_bank_statement_1.pdf",
+        "png": "07_bank_statement/07_bank_statement_1.png"
+      },
+      "fields": {
+        "doc_type": "דף חשבון בנק",
+        "bank": "בנק הפועלים",
+        "bank_code": "12",
+        "branch": 838,
+        "account_number": 414189,
+        "account_holder": "איתי דהן",
+        "statement_date": "02/07/2026",
+        "currency": "ILS",
+        "transactions": [
+          {
+            "date": "08/07/2026",
+            "description": "החזר הלוואה",
+            "debit": 4124.59,
+            "credit": null,
+            "balance": 14642.6
+          },
+          {
+            "date": "13/07/2026",
+            "description": "משיכת מזומן כספומט",
+            "debit": null,
+            "credit": 5915.29,
+            "balance": 20557.89
+          },
+          {
+            "date": "16/07/2026",
+            "description": "הוראת קבע - חשמל",
+            "debit": 3860.37,
+            "credit": null,
+            "balance": 16697.52
+          },
+          {
+            "date": "18/07/2026",
+            "description": "משיכת מזומן כספומט",
+            "debit": 3920.37,
+            "credit": null,
+            "balance": 12777.15
+          },
+          {
+            "date": "20/07/2026",
+            "description": "הפקדת שיק",
+            "debit": 4272.28,
+            "credit": null,
+            "balance": 8504.87
+          },
+          {
+            "date": "25/07/2026",
+            "description": "החזר הלוואה",
+            "debit": null,
+            "credit": 2219.2,
+            "balance": 10724.07
+          },
+          {
+            "date": "30/07/2026",
+            "description": "העברת זכות",
+            "debit": 3360.14,
+            "credit": null,
+            "balance": 7363.93
+          },
+          {
+            "date": "01/08/2026",
+            "description": "תשלום שכר",
+            "debit": 453.46,
+            "credit": null,
+            "balance": 6910.47
+          }
+        ],
+        "closing_balance": 6910.47
+      }
+    },
+    {
+      "id": "07_bank_statement_2",
+      "files": {
+        "pdf": "07_bank_statement/07_bank_statement_2.pdf",
+        "png": "07_bank_statement/07_bank_statement_2.png"
+      },
+      "fields": {
+        "doc_type": "דף חשבון בנק",
+        "bank": "הבנק הבינלאומי",
+        "bank_code": "31",
+        "branch": 514,
+        "account_number": 944310,
+        "account_holder": "רבקה רוזנברג",
+        "statement_date": "26/04/2026",
+        "currency": "ILS",
+        "transactions": [
+          {
+            "date": "01/05/2026",
+            "description": "החזר הלוואה",
+            "debit": null,
+            "credit": 2282.37,
+            "balance": 5902.22
+          },
+          {
+            "date": "03/05/2026",
+            "description": "הוראת קבע - חשמל",
+            "debit": null,
+            "credit": 151.52,
+            "balance": 6053.74
+          },
+          {
+            "date": "07/05/2026",
+            "description": "הוראת קבע - חשמל",
+            "debit": 466.67,
+            "credit": null,
+            "balance": 5587.07
+          },
+          {
+            "date": "09/05/2026",
+            "description": "הוראת קבע - ארנונה",
+            "debit": null,
+            "credit": 2584.5,
+            "balance": 8171.57
+          },
+          {
+            "date": "14/05/2026",
+            "description": "הפקדת שיק",
+            "debit": null,
+            "credit": 3923.17,
+            "balance": 12094.74
+          },
+          {
+            "date": "19/05/2026",
+            "description": "החזר הלוואה",
+            "debit": 2008.26,
+            "credit": null,
+            "balance": 10086.48
+          },
+          {
+            "date": "24/05/2026",
+            "description": "משיכת מזומן כספומט",
+            "debit": 1788.07,
+            "credit": null,
+            "balance": 8298.41
+          },
+          {
+            "date": "29/05/2026",
+            "description": "עמלת ניהול חשבון",
+            "debit": 3557.08,
+            "credit": null,
+            "balance": 4741.33
+          },
+          {
+            "date": "01/06/2026",
+            "description": "הוראת קבע - ארנונה",
+            "debit": 699.06,
+            "credit": null,
+            "balance": 4042.27
+          },
+          {
+            "date": "02/06/2026",
+            "description": "משיכת מזומן כספומט",
+            "debit": 2347.67,
+            "credit": null,
+            "balance": 1694.6
+          }
+        ],
+        "closing_balance": 1694.6
+      }
+    },
+    {
+      "id": "07_bank_statement_3",
+      "files": {
+        "pdf": "07_bank_statement/07_bank_statement_3.pdf",
+        "png": "07_bank_statement/07_bank_statement_3.png"
+      },
+      "fields": {
+        "doc_type": "דף חשבון בנק",
+        "bank": "בנק דיסקונט",
+        "bank_code": "11",
+        "branch": 717,
+        "account_number": 512359,
+        "account_holder": "שרה רוזנברג",
+        "statement_date": "10/06/2026",
+        "currency": "ILS",
+        "transactions": [
+          {
+            "date": "15/06/2026",
+            "description": "חיוב כרטיס אשראי",
+            "debit": 6204.84,
+            "credit": null,
+            "balance": -3183.78
+          },
+          {
+            "date": "19/06/2026",
+            "description": "עמלת ניהול חשבון",
+            "debit": 6496.99,
+            "credit": null,
+            "balance": -9680.77
+          },
+          {
+            "date": "20/06/2026",
+            "description": "הוראת קבע - חשמל",
+            "debit": null,
+            "credit": 4709.79,
+            "balance": -4970.98
+          },
+          {
+            "date": "23/06/2026",
+            "description": "משיכת מזומן כספומט",
+            "debit": 5985.98,
+            "credit": null,
+            "balance": -10956.96
+          },
+          {
+            "date": "28/06/2026",
+            "description": "העברה בבנקאות מקוונת",
+            "debit": 6417.89,
+            "credit": null,
+            "balance": -17374.85
+          },
+          {
+            "date": "30/06/2026",
+            "description": "הוראת קבע - ארנונה",
+            "debit": 2122.87,
+            "credit": null,
+            "balance": -19497.72
+          },
+          {
+            "date": "02/07/2026",
+            "description": "חיוב כרטיס אשראי",
+            "debit": 5907.28,
+            "credit": null,
+            "balance": -25405.0
+          },
+          {
+            "date": "07/07/2026",
+            "description": "הוראת קבע - חשמל",
+            "debit": null,
+            "credit": 2605.62,
+            "balance": -22799.38
+          },
+          {
+            "date": "11/07/2026",
+            "description": "הוראת קבע - חשמל",
+            "debit": null,
+            "credit": 2294.55,
+            "balance": -20504.83
+          },
+          {
+            "date": "16/07/2026",
+            "description": "חיוב כרטיס אשראי",
+            "debit": 5413.06,
+            "credit": null,
+            "balance": -25917.89
+          },
+          {
+            "date": "19/07/2026",
+            "description": "משיכת מזומן כספומט",
+            "debit": null,
+            "credit": 446.34,
+            "balance": -25471.55
+          }
+        ],
+        "closing_balance": -25471.55
+      }
+    },
+    {
+      "id": "08_cheque_1",
+      "files": {
+        "pdf": "08_cheque/08_cheque_1.pdf",
+        "png": "08_cheque/08_cheque_1.png"
+      },
+      "fields": {
+        "doc_type": "שיק",
+        "bank": "בנק דיסקונט",
+        "bank_code": "11",
+        "branch": 386,
+        "account_number": 488690,
+        "cheque_number": 7597,
+        "date": "05/07/2026",
+        "payer": "טכנולוגיות גמא בע\"מ",
+        "payee": "הדס דהן",
+        "currency": "ILS",
+        "amount": 7250.0,
+        "amount_words": "שבעה אלף מאתיים חמישים שקלים חדשים",
+        "micr": "7597-11-386-488690"
+      }
+    },
+    {
+      "id": "08_cheque_2",
+      "files": {
+        "pdf": "08_cheque/08_cheque_2.pdf",
+        "png": "08_cheque/08_cheque_2.png"
+      },
+      "fields": {
+        "doc_type": "שיק",
+        "bank": "בנק דיסקונט",
+        "bank_code": "11",
+        "branch": 121,
+        "account_number": 661625,
+        "cheque_number": 7494,
+        "date": "28/06/2026",
+        "payer": "ישראל ביטון",
+        "payee": "ישראל פרץ",
+        "currency": "ILS",
+        "amount": 2400.0,
+        "amount_words": "שניים אלף ארבע מאות שקלים חדשים",
+        "micr": "7494-11-121-661625"
+      }
+    },
+    {
+      "id": "08_cheque_3",
+      "files": {
+        "pdf": "08_cheque/08_cheque_3.pdf",
+        "png": "08_cheque/08_cheque_3.png"
+      },
+      "fields": {
+        "doc_type": "שיק",
+        "bank": "בנק דיסקונט",
+        "bank_code": "11",
+        "branch": 213,
+        "account_number": 694330,
+        "cheque_number": 9155,
+        "date": "04/06/2026",
+        "payer": "אור מזרחי",
+        "payee": "סחר גמא בע\"מ",
+        "currency": "ILS",
+        "amount": 850.0,
+        "amount_words": "שמונה מאות חמישים שקלים חדשים",
+        "micr": "9155-11-213-694330"
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "02_invoice_tax_receipt_2",
+  "files": {
+    "pdf": "02_invoice_tax_receipt/02_invoice_tax_receipt_2.pdf",
+    "png": "02_invoice_tax_receipt/02_invoice_tax_receipt_2.png"
+  },
+  "fields": {
+    "doc_type": "חשבונית מס / קבלה",
+    "doc_number": 44757,
+    "issue_date": "25/09/2025",
+    "seller": {
+      "name": "טכנולוגיות נט בע\"מ",
+      "vat_id": "813802329"
+    },
+    "customer": {
+      "name": "נועה מזרחי",
+      "id": "968239772"
+    },
+    "line_items": [
+      {
+        "description": "שירותי אינטגרציה",
+        "unit": "שעה",
+        "quantity": 3,
+        "unit_price": 480,
+        "line_total": 1440
+      },
+      {
+        "description": "רישיון תוכנה שנתי",
+        "unit": "יח'",
+        "quantity": 1,
+        "unit_price": 1200,
+        "line_total": 1200
+      },
+      {
+        "description": "שירותי ייעוץ טכנולוגי",
+        "unit": "שעה",
+        "quantity": 4,
+        "unit_price": 220,
+        "line_total": 880
+      },
+      {
+        "description": "רישיון תוכנה שנתי",
+        "unit": "יח'",
+        "quantity": 1,
+        "unit_price": 4200,
+        "line_total": 4200
+      },
+      {
+        "description": "רישיון תוכנה שנתי",
+        "unit": "יח'",
+        "quantity": 3,
+        "unit_price": 600,
+        "line_total": 1800
+      }
+    ],
+    "currency": "ILS",
+    "subtotal": 9520,
+    "vat_rate": 0.18,
+    "vat_amount": 1713.6,
+    "total": 11233.6,
+    "allocation_number": "300327505",
+    "is_paid": true
+  }
+}
