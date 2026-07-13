@@ -51,16 +51,15 @@ And the two things a business owner worries about with AI are: **"it makes thing
 
 ## Quickstart
 
-Works **offline out of the box** — the default mode is `mock` (no API key, no network), so you can
-launch the UI, browse `/docs` and run the pipeline immediately:
-
 ```bash
 pip install -r requirements.txt
 python app_extractor/server.py             # opens http://127.0.0.1:8002
 ```
 
-For **real extraction**, switch the AI mode (in the UI header or `config.json`) to `api` or `sdk`
-and provide a key — see [Data & privacy](#data--privacy--נתונים-ופרטיות) below.
+**On first launch the app asks how to connect to Claude** — enter **your own API key**, use **SDK**
+(your Claude login), or pick **offline demo (mock)** to explore without a key. Nothing is
+pre-configured and **no key ships in the repo**; the prompt reappears on every server start until you
+choose. See [Data & privacy](#data--privacy--נתונים-ופרטיות) below.
 
 CLI equivalents:
 

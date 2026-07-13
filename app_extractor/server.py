@@ -38,6 +38,10 @@ STATIC = os.path.join(_HERE, "static")
 # Приоритетнее ANTHROPIC_API_KEY (.env). Сбрасывается при перезапуске сервера.
 _RUNTIME_KEY = {"api_key": None}
 
+# Флаг онбординга ТЕКУЩЕГО запуска сервера. Сбрасывается при рестарте -> модалка выбора
+# доступа (API / SDK / офлайн-демо) показывается при каждом запуске, пока пользователь не выберет.
+_SESSION = {"onboarded": False}
+
 
 def _sse(event: dict) -> str:
     return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
@@ -85,6 +89,7 @@ def get_config():
             "valid_models": config.VALID_MODELS,
             "dataset_dir": str(cfg.dataset_dir()),
             "has_env_key": bool(os.getenv("ANTHROPIC_API_KEY")),
+            "onboarded": _SESSION["onboarded"],
             "warnings": cfg.validate()}
 
 
@@ -105,6 +110,23 @@ async def set_key(payload: dict):
     k = (payload.get("api_key") or "").strip()
     _RUNTIME_KEY["api_key"] = k or None
     return {"ok": True, "has_key": bool(_RUNTIME_KEY["api_key"])}
+
+
+@app.post("/api/onboard")
+async def onboard(payload: dict):
+    """Завершить онбординг первого запуска: выбрать режим (api/sdk/mock), при api — принять ключ.
+    Ключ живёт только в памяти. Помечаем сессию onboarded, чтобы модалка не показывалась до рестарта."""
+    mode = payload.get("mode")
+    if mode in ("api", "sdk", "mock"):
+        cfg = config.load()
+        cfg._data["ai_mode"] = mode
+        config.save(cfg)
+    if mode == "api":
+        k = (payload.get("api_key") or "").strip()
+        _RUNTIME_KEY["api_key"] = k or None
+    _SESSION["onboarded"] = True
+    return {"ok": True, "onboarded": True, "ai_mode": mode,
+            "has_key": bool(_RUNTIME_KEY["api_key"])}
 
 
 @app.get("/api/dataset")

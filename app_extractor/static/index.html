@@ -28,6 +28,16 @@
   .modebar select{padding:7px 10px;border-radius:9px;border:0;font-size:13px}
   #langSel{background:rgba(255,255,255,.92);color:#222;cursor:pointer}
   #apiKey{background:rgba(255,255,255,.92);color:#222;border:0;border-radius:8px;padding:6px 9px;font-size:12px;width:200px}
+  .setup{position:fixed;inset:0;background:rgba(15,20,30,.75);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+  .setup.hidden{display:none}
+  .setup-card{background:#fff;color:#1a1a1a;max-width:460px;width:100%;border-radius:14px;padding:26px 24px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+  .setup-card h2{margin:0 0 6px;font-size:20px}
+  .setup-actions{display:flex;gap:10px;margin:18px 0 8px;flex-wrap:wrap}
+  .setup-actions .go{flex:1;min-width:150px;margin:0}
+  .go.alt{background:#334155}
+  #suApiBox{display:flex;gap:8px;margin:10px 0 4px}
+  #suKey{flex:1;border:1px solid #cbd5e1;border-radius:8px;padding:9px 10px;font-size:13px}
+  #suDemo{display:inline-block;margin-top:12px;color:#64748b;font-size:12px;cursor:pointer;text-decoration:underline}
   .wrap{max-width:1400px;margin:0 auto;padding:22px 30px}
   .tabs{display:flex;gap:8px;margin-bottom:18px}
   .tabs button{padding:10px 18px;border:1px solid var(--line);background:var(--panel);color:var(--ink);
@@ -84,6 +94,22 @@
 </style>
 </head>
 <body>
+<div id="setup" class="setup hidden">
+  <div class="setup-card">
+    <h2 data-i18n="setupTitle">חיבור Claude</h2>
+    <p class="muted" data-i18n="setupSub"></p>
+    <div class="setup-actions">
+      <button class="go" id="suApi" data-i18n="setupApi">API key</button>
+      <button class="go alt" id="suSdk" data-i18n="setupSdk">SDK</button>
+    </div>
+    <div id="suApiBox" class="hidden">
+      <input id="suKey" type="password" autocomplete="off" spellcheck="false">
+      <button class="go" id="suApiGo" style="max-width:130px;margin:0" data-i18n="setupContinue">Continue</button>
+    </div>
+    <p class="muted small" data-i18n="setupSdkHint"></p>
+    <span id="suDemo" data-i18n="setupDemo"></span>
+  </div>
+</div>
 <header>
   <div class="logo">🔍</div>
   <div><h1 data-i18n="h1">Экстрактор данных</h1><p data-i18n="sub">Vision-LLM извлечение + сверка с ground-truth по полям</p></div>
@@ -169,6 +195,10 @@ const I18N={
     keyApiHint:"API mode: paste your own Anthropic API key — it stays in this browser session only and is never written to the repo.",
     keySdkHint:"SDK mode uses your own Claude subscription — run `claude login` once in the terminal.",
     keyMockHint:"Mock mode runs offline — no key needed (this is the default).",
+    setupTitle:"Connect Claude to start", setupApi:"Use API key", setupSdk:"Use SDK (Claude subscription)",
+    setupContinue:"Continue", setupDemo:"or just explore the offline demo (mock)",
+    setupSub:"Choose how the extractor reaches Claude. Your key is kept in this browser session only — never written to the repo.",
+    setupSdkHint:"SDK uses your own Claude login — run `claude login` once in the terminal.",
     codes:{LINE_ITEMS_SUM:"Sum of line items ≠ subtotal", VAT_TOTAL:"subtotal + VAT ≠ total",
       VAT_RATE_CALC:"subtotal × VAT rate ≠ VAT amount", LINE_ITEM_MATH:"quantity × unit price ≠ line total",
       PAYSLIP_NET:"gross − deductions ≠ net pay", EARNINGS_SUM:"Sum of earnings ≠ gross",
@@ -197,6 +227,10 @@ const I18N={
     keyApiHint:"מצב API: הדביקו מפתח Anthropic API משלכם — הוא נשמר רק בדפדפן הזה ולעולם לא נכתב למאגר.",
     keySdkHint:"מצב SDK משתמש במנוי Claude שלכם — הריצו `claude login` פעם אחת בטרמינל.",
     keyMockHint:"מצב Mock פועל לא-מקוון — אין צורך במפתח (זו ברירת המחדל).",
+    setupTitle:"התחברו ל-Claude כדי להתחיל", setupApi:"מפתח API", setupSdk:"SDK (מנוי Claude)",
+    setupContinue:"המשך", setupDemo:"או רק לצפות בדמו הלא-מקוון (mock)",
+    setupSub:"בחרו כיצד המחלץ מתחבר ל-Claude. המפתח נשמר רק בדפדפן הזה — לעולם לא נכתב למאגר.",
+    setupSdkHint:"מצב SDK משתמש בהתחברות Claude שלכם — הריצו `claude login` פעם אחת בטרמינל.",
     codes:{LINE_ITEMS_SUM:"סכום השורות ≠ סכום ביניים", VAT_TOTAL:"סכום ביניים + מע\"מ ≠ סה\"כ",
       VAT_RATE_CALC:"סכום ביניים × שיעור מע\"מ ≠ סכום מע\"מ", LINE_ITEM_MATH:"כמות × מחיר יחידה ≠ סה\"כ שורה",
       PAYSLIP_NET:"ברוטו − ניכויים ≠ נטו", EARNINGS_SUM:"סכום התשלומים ≠ ברוטו",
@@ -225,6 +259,10 @@ const I18N={
     keyApiHint:"Режим API: вставьте свой ключ Anthropic API — он хранится только в этой вкладке браузера и никогда не пишется в репозиторий.",
     keySdkHint:"Режим SDK использует вашу подписку Claude — выполните `claude login` один раз в терминале.",
     keyMockHint:"Режим Mock работает офлайн — ключ не нужен (по умолчанию).",
+    setupTitle:"Подключите Claude для старта", setupApi:"Ключ API", setupSdk:"SDK (подписка Claude)",
+    setupContinue:"Продолжить", setupDemo:"или просто посмотреть офлайн-демо (mock)",
+    setupSub:"Выберите, как экстрактор обращается к Claude. Ключ хранится только в этой вкладке браузера — никогда не пишется в репозиторий.",
+    setupSdkHint:"Режим SDK использует вашу авторизацию Claude — выполните `claude login` один раз в терминале.",
     codes:{LINE_ITEMS_SUM:"Сумма позиций ≠ subtotal", VAT_TOTAL:"subtotal + НДС ≠ total",
       VAT_RATE_CALC:"subtotal × ставка НДС ≠ сумма НДС", LINE_ITEM_MATH:"кол-во × цена ≠ сумма строки",
       PAYSLIP_NET:"брутто − удержания ≠ нетто", EARNINGS_SUM:"Сумма начислений ≠ брутто",
@@ -245,6 +283,7 @@ function applyLang(lang){
   $('#langSel').value=lang;
   const opt0=$('#docSel').querySelector('option[value=""]'); if(opt0) opt0.textContent=t('selectDataset');
   if(!UPLOAD) $('#dropText').textContent=t('dropText');
+  { const sk=$('#suKey'); if(sk) sk.placeholder=t('apiKeyPh'); }
   if(LAST) renderResult(LAST);
   if(LASTREPORT) renderReport(LASTREPORT);
   updateKeyUI();
@@ -280,6 +319,13 @@ function updateKeyUI(){
 async function saveConfig(patch){
   await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)});
   await loadConfig();
+}
+function showSetup(){ $('#setup').classList.remove('hidden'); const sk=$('#suKey'); if(sk) sk.placeholder=t('apiKeyPh'); }
+function hideSetup(){ $('#setup').classList.add('hidden'); }
+async function onboard(mode, apiKey){
+  await fetch('/api/onboard',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({mode, api_key:apiKey||null})});
+  await loadConfig(); hideSetup();
 }
 async function loadDataset(){
   const d=await (await fetch('/api/dataset')).json();
@@ -400,7 +446,12 @@ function renderReport(r){
 
 $('#langSel').onchange=e=>applyLang(e.target.value);
 $('#apiKey').onchange=async e=>{ await fetch('/api/set-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({api_key:e.target.value||null})}); };
-(async()=>{ await loadConfig(); await loadDataset(); applyLang(LANG); })();
+$('#suApi').onclick=()=>{ $('#suApiBox').classList.remove('hidden'); $('#suKey').focus(); };
+$('#suApiGo').onclick=()=>{ const k=$('#suKey').value.trim(); if(!k){ $('#suKey').focus(); return; } onboard('api',k); };
+$('#suKey').onkeydown=e=>{ if(e.key==='Enter') $('#suApiGo').click(); };
+$('#suSdk').onclick=()=>onboard('sdk');
+$('#suDemo').onclick=()=>onboard('mock');
+(async()=>{ await loadConfig(); await loadDataset(); applyLang(LANG); if(!CFG.onboarded) showSetup(); })();
 </script>
 </body>
 </html>
