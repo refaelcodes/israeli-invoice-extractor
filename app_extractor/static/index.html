@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,6 +27,7 @@
   .seg button.on{background:#fff;color:var(--accent)}
   .modebar select{padding:7px 10px;border-radius:9px;border:0;font-size:13px}
   #langSel{background:rgba(255,255,255,.92);color:#222;cursor:pointer}
+  #apiKey{background:rgba(255,255,255,.92);color:#222;border:0;border-radius:8px;padding:6px 9px;font-size:12px;width:200px}
   .wrap{max-width:1400px;margin:0 auto;padding:22px 30px}
   .tabs{display:flex;gap:8px;margin-bottom:18px}
   .tabs button{padding:10px 18px;border:1px solid var(--line);background:var(--panel);color:var(--ink);
@@ -89,6 +90,7 @@
   <div class="modebar">
     <div class="seg" id="modeSeg"></div>
     <select id="modelSel" title="model"></select>
+    <input id="apiKey" type="password" autocomplete="off" spellcheck="false" class="hidden">
     <select id="langSel">
       <option value="en">English</option><option value="he">עברית</option><option value="ru">Русский</option>
     </select>
@@ -97,6 +99,7 @@
 
 <div class="wrap">
   <div id="warnBox"></div>
+  <div id="keyNote" class="muted" style="margin-bottom:10px"></div>
   <div class="tabs">
     <button class="on" data-tab="single" data-i18n="tabSingle">Один документ</button>
     <button data-tab="batch" data-i18n="tabBatch">Батч по датасету</button>
@@ -143,7 +146,7 @@
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 let CFG={}, SELECTED=null, UPLOAD=null, LAST=null, LASTREPORT=null;
-let LANG=localStorage.getItem('ui_lang')||'ru';
+let LANG=localStorage.getItem('ui_lang')||'he';
 
 const I18N={
   en:{docTitle:"Israeli Docs — Extractor", h1:"Data Extractor",
@@ -162,6 +165,10 @@ const I18N={
     bDone:a=>`Done. Accuracy: ${a}%`, errPrefix:"Error: ",
     vOk:"✓ Document arithmetic checks out", vTitle:n=>`⚠ Arithmetic inconsistencies: ${n} — needs review`,
     vExpected:"expected", vGot:"computed",
+    apiKeyPh:"your Anthropic API key (sk-ant-…)",
+    keyApiHint:"API mode: paste your own Anthropic API key — it stays in this browser session only and is never written to the repo.",
+    keySdkHint:"SDK mode uses your own Claude subscription — run `claude login` once in the terminal.",
+    keyMockHint:"Mock mode runs offline — no key needed (this is the default).",
     codes:{LINE_ITEMS_SUM:"Sum of line items ≠ subtotal", VAT_TOTAL:"subtotal + VAT ≠ total",
       VAT_RATE_CALC:"subtotal × VAT rate ≠ VAT amount", LINE_ITEM_MATH:"quantity × unit price ≠ line total",
       PAYSLIP_NET:"gross − deductions ≠ net pay", EARNINGS_SUM:"Sum of earnings ≠ gross",
@@ -186,6 +193,10 @@ const I18N={
     bDone:a=>`הסתיים. דיוק: ${a}%`, errPrefix:"שגיאה: ",
     vOk:"✓ החשבון האריתמטי של המסמך מסתדר", vTitle:n=>`⚠ אי-התאמות אריתמטיות: ${n} — נדרשת בדיקה`,
     vExpected:"צפוי", vGot:"חושב",
+    apiKeyPh:"מפתח Anthropic API שלכם (sk-ant-…)",
+    keyApiHint:"מצב API: הדביקו מפתח Anthropic API משלכם — הוא נשמר רק בדפדפן הזה ולעולם לא נכתב למאגר.",
+    keySdkHint:"מצב SDK משתמש במנוי Claude שלכם — הריצו `claude login` פעם אחת בטרמינל.",
+    keyMockHint:"מצב Mock פועל לא-מקוון — אין צורך במפתח (זו ברירת המחדל).",
     codes:{LINE_ITEMS_SUM:"סכום השורות ≠ סכום ביניים", VAT_TOTAL:"סכום ביניים + מע\"מ ≠ סה\"כ",
       VAT_RATE_CALC:"סכום ביניים × שיעור מע\"מ ≠ סכום מע\"מ", LINE_ITEM_MATH:"כמות × מחיר יחידה ≠ סה\"כ שורה",
       PAYSLIP_NET:"ברוטו − ניכויים ≠ נטו", EARNINGS_SUM:"סכום התשלומים ≠ ברוטו",
@@ -210,6 +221,10 @@ const I18N={
     bDone:a=>`Готово. Точность: ${a}%`, errPrefix:"Ошибка: ",
     vOk:"✓ Арифметика документа сходится", vTitle:n=>`⚠ Арифметических расхождений: ${n} — нужна проверка`,
     vExpected:"в документе", vGot:"посчитано",
+    apiKeyPh:"ваш ключ Anthropic API (sk-ant-…)",
+    keyApiHint:"Режим API: вставьте свой ключ Anthropic API — он хранится только в этой вкладке браузера и никогда не пишется в репозиторий.",
+    keySdkHint:"Режим SDK использует вашу подписку Claude — выполните `claude login` один раз в терминале.",
+    keyMockHint:"Режим Mock работает офлайн — ключ не нужен (по умолчанию).",
     codes:{LINE_ITEMS_SUM:"Сумма позиций ≠ subtotal", VAT_TOTAL:"subtotal + НДС ≠ total",
       VAT_RATE_CALC:"subtotal × ставка НДС ≠ сумма НДС", LINE_ITEM_MATH:"кол-во × цена ≠ сумма строки",
       PAYSLIP_NET:"брутто − удержания ≠ нетто", EARNINGS_SUM:"Сумма начислений ≠ брутто",
@@ -232,6 +247,7 @@ function applyLang(lang){
   if(!UPLOAD) $('#dropText').textContent=t('dropText');
   if(LAST) renderResult(LAST);
   if(LASTREPORT) renderReport(LASTREPORT);
+  updateKeyUI();
 }
 
 function jsonHighlight(obj){
@@ -252,6 +268,14 @@ async function loadConfig(){
   $$('#modeSeg button').forEach(b=>b.onclick=()=>saveConfig({ai_mode:b.dataset.m}));
   $('#modelSel').onchange=()=>saveConfig({model:$('#modelSel').value});
   $('#warnBox').innerHTML=(CFG.warnings||[]).map(w=>`<div class="warn">⚠ ${w}</div>`).join('');
+  updateKeyUI();
+}
+function updateKeyUI(){
+  if(!CFG.valid_modes) return;
+  const mode=CFG.ai_mode, inp=$('#apiKey');
+  inp.classList.toggle('hidden', mode!=='api');
+  inp.placeholder=t('apiKeyPh');
+  $('#keyNote').textContent = mode==='api'?t('keyApiHint') : mode==='sdk'?t('keySdkHint') : t('keyMockHint');
 }
 async function saveConfig(patch){
   await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)});
@@ -375,6 +399,7 @@ function renderReport(r){
 }
 
 $('#langSel').onchange=e=>applyLang(e.target.value);
+$('#apiKey').onchange=async e=>{ await fetch('/api/set-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({api_key:e.target.value||null})}); };
 (async()=>{ await loadConfig(); await loadDataset(); applyLang(LANG); })();
 </script>
 </body>

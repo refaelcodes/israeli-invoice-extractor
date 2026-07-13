@@ -34,6 +34,10 @@ from _core import config, ai_provider, validate  # noqa: E402
 app = FastAPI(title="Israeli Docs — Экстрактор")
 STATIC = os.path.join(_HERE, "static")
 
+# API-ключ, введённый в UI. Живёт ТОЛЬКО в памяти процесса — не пишется в config.json/файлы/репо.
+# Приоритетнее ANTHROPIC_API_KEY (.env). Сбрасывается при перезапуске сервера.
+_RUNTIME_KEY = {"api_key": None}
+
 
 def _sse(event: dict) -> str:
     return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
@@ -80,6 +84,7 @@ def get_config():
             "valid_modes": list(ai_provider._PROVIDERS.keys()),
             "valid_models": config.VALID_MODELS,
             "dataset_dir": str(cfg.dataset_dir()),
+            "has_env_key": bool(os.getenv("ANTHROPIC_API_KEY")),
             "warnings": cfg.validate()}
 
 
@@ -92,6 +97,14 @@ async def set_config(payload: dict):
         cfg._data["model"] = payload["model"]
     config.save(cfg)
     return {"ok": True, "ai_mode": cfg.ai_mode, "model": cfg.model}
+
+
+@app.post("/api/set-key")
+async def set_key(payload: dict):
+    """Принять API-ключ из UI. Хранится ТОЛЬКО в памяти процесса (не в файлах/репо/config.json)."""
+    k = (payload.get("api_key") or "").strip()
+    _RUNTIME_KEY["api_key"] = k or None
+    return {"ok": True, "has_key": bool(_RUNTIME_KEY["api_key"])}
 
 
 @app.get("/api/dataset")
@@ -121,7 +134,8 @@ async def extract_doc(payload: dict):
         raise HTTPException(404, "unknown document id")
     cfg = config.load()
     png_abs = str(cfg.dataset_dir() / idx[did]["png"])
-    fields = await asyncio.to_thread(extract.extract, png_abs, cfg)
+    key = _RUNTIME_KEY["api_key"]
+    fields = await asyncio.to_thread(lambda: extract.extract(png_abs, cfg, api_key=key))
     comparison = batch.compare_one(idx[did]["fields"], fields)
     return {"id": did, "mode": cfg.ai_mode, "model": cfg.model,
             "predicted": fields, "truth": idx[did]["fields"], "comparison": comparison,
@@ -138,7 +152,8 @@ async def extract_upload(file: UploadFile = File(...)):
     try:
         tmp.write(data)
         tmp.close()
-        fields = await asyncio.to_thread(extract.extract, tmp.name, cfg)
+        key = _RUNTIME_KEY["api_key"]
+        fields = await asyncio.to_thread(lambda: extract.extract(tmp.name, cfg, api_key=key))
     finally:
         os.unlink(tmp.name)
     # Для чужого документа ground-truth нет — арифметическая валидация тут единственный
@@ -160,7 +175,8 @@ async def run_batch_stream():
 
         def work():
             try:
-                report = batch.run_batch(dataset_dir, pred_dir, cfg=cfg, progress=q.put)
+                report = batch.run_batch(dataset_dir, pred_dir, cfg=cfg, progress=q.put,
+                                         api_key=_RUNTIME_KEY["api_key"])
                 q.put({"stage": "report", "report": report})
             except Exception as e:  # noqa: BLE001
                 q.put({"stage": "error", "message": f"Ошибка: {e}"})

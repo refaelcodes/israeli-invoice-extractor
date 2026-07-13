@@ -156,9 +156,10 @@ class AIProvider:
     """
     mode = "base"
 
-    def __init__(self, model: str, max_tokens: int = 2048):
+    def __init__(self, model: str, max_tokens: int = 2048, api_key: str = None):
         self.model = model
         self.max_tokens = max_tokens
+        self.api_key = api_key      # ключ из UI (в памяти сессии), приоритетнее ANTHROPIC_API_KEY
 
     def extract(self, images, media_type: str = "image/png") -> dict:
         raise NotImplementedError
@@ -173,7 +174,8 @@ class ApiProvider(AIProvider):
 
     def extract(self, images, media_type: str = "image/png") -> dict:
         import anthropic
-        client = anthropic.Anthropic()  # ключ из ANTHROPIC_API_KEY
+        # ключ из UI (в памяти сессии, в файлы не пишется) ИЛИ из ANTHROPIC_API_KEY (.env)
+        client = anthropic.Anthropic(api_key=self.api_key) if self.api_key else anthropic.Anthropic()
         req = build_request(images, self.model, self.max_tokens, media_type)
         resp = client.messages.create(**req)
         return parse_tool_response(resp)
@@ -243,12 +245,13 @@ class SdkProvider(AIProvider):
 _PROVIDERS = {"api": ApiProvider, "sdk": SdkProvider, "mock": MockProvider}
 
 
-def get_provider(cfg) -> AIProvider:
-    """Фабрика: выбрать провайдера по cfg.ai_mode. cfg — _core.config.Config или dict."""
+def get_provider(cfg, api_key: str = None) -> AIProvider:
+    """Фабрика: выбрать провайдера по cfg.ai_mode. cfg — _core.config.Config или dict.
+    api_key (опц.) — ключ из UI; приоритетнее ANTHROPIC_API_KEY, в файлы не пишется."""
     mode = cfg.ai_mode if hasattr(cfg, "ai_mode") else cfg.get("ai_mode", "mock")
     model = cfg.model if hasattr(cfg, "model") else cfg.get("model", "claude-opus-4-8")
     max_tokens = (cfg.extractor if hasattr(cfg, "extractor") else cfg.get("extractor", {})).get("max_tokens", 2048)
     cls = _PROVIDERS.get(mode)
     if cls is None:
         raise ValueError(f"Неизвестный ai_mode='{mode}'. Ожидается один из {list(_PROVIDERS)}")
-    return cls(model=model, max_tokens=max_tokens)
+    return cls(model=model, max_tokens=max_tokens, api_key=api_key)

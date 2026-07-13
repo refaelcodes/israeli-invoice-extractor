@@ -65,13 +65,14 @@ def load_image_b64(path):
     return p["b64"], p["media_type"]
 
 
-def extract(path, cfg=None, mode=None):
-    """Извлечь данные из документа. mode переопределяет config.ai_mode при необходимости."""
+def extract(path, cfg=None, mode=None, api_key=None):
+    """Извлечь данные из документа. mode переопределяет config.ai_mode при необходимости.
+    api_key (опц.) — ключ из UI; приоритетнее ANTHROPIC_API_KEY, в файлы не пишется."""
     cfg = cfg or config.load()
     if mode:
         cfg._data["ai_mode"] = mode
     e = cfg.extractor
-    provider = ai_provider.get_provider(cfg)
+    provider = ai_provider.get_provider(cfg, api_key=api_key)
     pages = load_pages_b64(path, max_pages=e.get("max_pages", 10), pdf_dpi=e.get("pdf_dpi", 150))
     return provider.extract(pages)
 

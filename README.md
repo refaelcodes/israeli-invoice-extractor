@@ -77,6 +77,7 @@ python _extractor/batch.py --dataset . --pred pred --mode mock
 - **Web UI** at `http://127.0.0.1:8002` — extract one document (from the dataset or your own upload)
   and see a **field-by-field comparison** vs ground-truth (green/red) with an overall accuracy %; or
   run the whole dataset as a batch with a live progress stream and a "weakest fields" report.
+- The UI **defaults to Hebrew** (RTL); switch to English / Russian from the header selector.
 - **Interactive API showcase:** `http://127.0.0.1:8002/docs` — FastAPI auto-generates a Swagger UI
   where anyone can try the endpoints without reading code.
 - **Recorded walkthrough:** _(Loom/YouTube link — coming soon)_
@@ -120,9 +121,12 @@ explicit about it:
 
 - **Three AI modes**, switchable in the UI:
   - `mock` — fully offline, no data leaves the machine (default).
-  - `api` — direct Anthropic API. For business/API use, **inputs are not used to train models**, and
-    data is retained only briefly (Zero-Data-Retention options exist). Use this for third-party docs.
-  - `sdk` — your personal Claude subscription; fine for your own development, **not** for clients' data.
+  - `api` — direct Anthropic API. You supply **your own** key: paste it into the UI field (kept in the
+    browser session only, **never written to the repo**) or set `ANTHROPIC_API_KEY` in `.env`. For
+    business/API use, **inputs are not used to train models**, and data is retained only briefly
+    (Zero-Data-Retention options exist). Use this for third-party docs.
+  - `sdk` — your personal Claude subscription (run `claude login` once); fine for your own
+    development, **not** for clients' data.
 - **Local-model option (roadmap):** the transport is abstracted, so a self-hosted model (e.g. Ollama)
   can be added for on-premise, fully-local extraction.
 - **PII stays out of the repo:** `.env.example` carries no secrets, uploads are processed to a temp

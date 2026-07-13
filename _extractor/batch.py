@@ -81,8 +81,9 @@ def build_report(dataset_dir, pred_dir):
     }
 
 
-def run_batch(dataset_dir, pred_dir, cfg=None, mode=None, progress=None):
-    """Извлечь все PNG датасета -> записать pred/<id>.json -> вернуть build_report()."""
+def run_batch(dataset_dir, pred_dir, cfg=None, mode=None, progress=None, api_key=None):
+    """Извлечь все PNG датасета -> записать pred/<id>.json -> вернуть build_report().
+    api_key (опц.) — ключ из UI, прокидывается в extract.extract."""
     cfg = cfg or config.load()
     progress = progress or _noop
     os.makedirs(pred_dir, exist_ok=True)
@@ -92,7 +93,7 @@ def run_batch(dataset_dir, pred_dir, cfg=None, mode=None, progress=None):
     for i, png in enumerate(pngs, 1):
         did = os.path.splitext(os.path.basename(png))[0]
         try:
-            fields = extract.extract(png, cfg=cfg, mode=mode)
+            fields = extract.extract(png, cfg=cfg, mode=mode, api_key=api_key)
             json.dump({"id": did, "fields": fields},
                       open(os.path.join(pred_dir, did + ".json"), "w", encoding="utf-8"),
                       ensure_ascii=False, indent=2)
