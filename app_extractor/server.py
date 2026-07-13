@@ -36,7 +36,7 @@ STATIC = os.path.join(_HERE, "static")
 
 # API-ключ, введённый в UI. Живёт ТОЛЬКО в памяти процесса — не пишется в config.json/файлы/репо.
 # Приоритетнее ANTHROPIC_API_KEY (.env). Сбрасывается при перезапуске сервера.
-_RUNTIME_KEY = {"api_key": None}
+_RUNTIME_KEY = {"api_key": None, "oauth_token": None}
 
 # Флаг онбординга ТЕКУЩЕГО запуска сервера. Сбрасывается при рестарте -> модалка выбора
 # доступа (API / SDK / офлайн-демо) показывается при каждом запуске, пока пользователь не выберет.
@@ -124,9 +124,17 @@ async def onboard(payload: dict):
     if mode == "api":
         k = (payload.get("api_key") or "").strip()
         _RUNTIME_KEY["api_key"] = k or None
+    if mode == "sdk":
+        # OAuth-токен Claude (из UI). Кладём в память процесса И в переменную окружения,
+        # откуда его берёт claude_agent_sdk. В файлы/репо не пишется.
+        tok = (payload.get("token") or "").strip()
+        _RUNTIME_KEY["oauth_token"] = tok or None
+        if tok:
+            os.environ["CLAUDE_CODE_OAUTH_TOKEN"] = tok
     _SESSION["onboarded"] = True
     return {"ok": True, "onboarded": True, "ai_mode": mode,
-            "has_key": bool(_RUNTIME_KEY["api_key"])}
+            "has_key": bool(_RUNTIME_KEY["api_key"]),
+            "has_token": bool(_RUNTIME_KEY["oauth_token"])}
 
 
 @app.get("/api/dataset")

@@ -57,7 +57,8 @@ python app_extractor/server.py             # opens http://127.0.0.1:8002
 ```
 
 **On first launch the app asks how to connect to Claude** — enter **your own API key**, use **SDK**
-(your Claude login), or pick **offline demo (mock)** to explore without a key. Nothing is
+(paste a Claude OAuth token, generated with `claude setup-token`), or pick **offline demo (mock)** to
+explore without a key. Nothing is
 pre-configured and **no key ships in the repo**; the prompt reappears on every server start until you
 choose. See [Data & privacy](#data--privacy--נתונים-ופרטיות) below.
 
@@ -124,7 +125,8 @@ explicit about it:
     browser session only, **never written to the repo**) or set `ANTHROPIC_API_KEY` in `.env`. For
     business/API use, **inputs are not used to train models**, and data is retained only briefly
     (Zero-Data-Retention options exist). Use this for third-party docs.
-  - `sdk` — your personal Claude subscription (run `claude login` once); fine for your own
+  - `sdk` — your personal Claude subscription via an **OAuth token** you supply (generate with
+    `claude setup-token`, paste it in the first-run prompt; held in memory only). Fine for your own
     development, **not** for clients' data.
 - **Local-model option (roadmap):** the transport is abstracted, so a self-hosted model (e.g. Ollama)
   can be added for on-premise, fully-local extraction.
