@@ -58,9 +58,10 @@ python app_extractor/server.py             # opens http://127.0.0.1:8002
 
 **On first launch the app asks how to connect to Claude** — enter **your own API key**, use **SDK**
 (paste a Claude OAuth token, generated with `claude setup-token`), or pick **offline demo (mock)** to
-explore without a key. Nothing is
-pre-configured and **no key ships in the repo**; the prompt reappears on every server start until you
-choose. See [Data & privacy](#data--privacy--נתונים-ופרטיות) below.
+explore without a key. You enter it **once**: the choice is saved locally in a **git-ignored**
+`.local_credentials.json` on your machine (never committed, no key ships in the repo), so later
+launches skip the prompt. A **Disconnect** button in the header clears it — the next launch asks
+again. See [Data & privacy](#data--privacy--נתונים-ופרטיות) below.
 
 CLI equivalents:
 
@@ -119,20 +120,20 @@ trust the output blindly:**
 Handling someone else's financial documents is handling personal data. This project is built to be
 explicit about it:
 
-- **Three AI modes**, switchable in the UI:
-  - `mock` — fully offline, no data leaves the machine (default).
-  - `api` — direct Anthropic API. You supply **your own** key: paste it into the UI field (kept in the
-    browser session only, **never written to the repo**) or set `ANTHROPIC_API_KEY` in `.env`. For
-    business/API use, **inputs are not used to train models**, and data is retained only briefly
-    (Zero-Data-Retention options exist). Use this for third-party docs.
+- **Three AI modes**, chosen once in the first-run prompt (and clearable via **Disconnect**):
+  - `mock` — fully offline, no data leaves the machine (default before you connect).
+  - `api` — direct Anthropic API. You supply **your own** key in the prompt (or set `ANTHROPIC_API_KEY`
+    in `.env`). The key is saved **only** in a git-ignored `.local_credentials.json` on your machine —
+    **never committed to the repo**. For business/API use, **inputs are not used to train models**, and
+    data is retained only briefly (Zero-Data-Retention options exist). Use this for third-party docs.
   - `sdk` — your personal Claude subscription via an **OAuth token** you supply (generate with
-    `claude setup-token`, paste it in the first-run prompt; held in memory only). Fine for your own
+    `claude setup-token`). Stored the same way (git-ignored, local only). Fine for your own
     development, **not** for clients' data.
 - **Local-model option (roadmap):** the transport is abstracted, so a self-hosted model (e.g. Ollama)
   can be added for on-premise, fully-local extraction.
-- **PII stays out of the repo:** `.env.example` carries no secrets, uploads are processed to a temp
-  file and deleted, and the committed dataset is 100% synthetic. (Turn on GitHub **secret scanning +
-  push protection** on the repo as a safety net.)
+- **PII stays out of the repo:** your key/token lives only in the git-ignored `.local_credentials.json`,
+  `.env.example` carries no secrets, uploads are processed to a temp file and deleted, and the committed
+  dataset is 100% synthetic. (Turn on GitHub **secret scanning + push protection** as a safety net.)
 - **EU / Israel angle** — a real differentiator for local clients: Israel's Amendment No. 13 to the
   Privacy Protection Law (in force Aug 2025) and the PPA's draft AI guidance name tools like Claude
   directly and expect an internal policy on what data may be sent to them; Israel holds EU adequacy

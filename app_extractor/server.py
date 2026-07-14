@@ -29,18 +29,66 @@ from fastapi.staticfiles import StaticFiles
 
 import extract          # _extractor/extract.py
 import batch            # _extractor/batch.py
-from _core import config, ai_provider, validate  # noqa: E402
+from _core import config, ai_provider, validate, paths  # noqa: E402
 
 app = FastAPI(title="Israeli Docs — Экстрактор")
 STATIC = os.path.join(_HERE, "static")
 
-# API-ключ, введённый в UI. Живёт ТОЛЬКО в памяти процесса — не пишется в config.json/файлы/репо.
-# Приоритетнее ANTHROPIC_API_KEY (.env). Сбрасывается при перезапуске сервера.
+# Локальное хранилище выбранного доступа к Claude. Файл лежит в .gitignore и в публичный
+# репозиторий НЕ попадает — он на машине пользователя, чтобы ввести ключ/токен ОДИН раз, а не при
+# каждом запуске. Кнопка «Отключить» удаляет этот файл -> при следующем старте снова спросит.
+_CREDS_PATH = paths.PROJECT_ROOT / ".local_credentials.json"
+
+# Активные креды в памяти процесса (загружаются из _CREDS_PATH при старте).
 _RUNTIME_KEY = {"api_key": None, "oauth_token": None}
 
-# Флаг онбординга ТЕКУЩЕГО запуска сервера. Сбрасывается при рестарте -> модалка выбора
-# доступа (API / SDK / офлайн-демо) показывается при каждом запуске, пока пользователь не выберет.
-_SESSION = {"onboarded": False}
+
+def _apply_mode(mode: str) -> None:
+    """Записать выбранный режим в config.json, чтобы извлечение брало нужный провайдер."""
+    if mode in ("api", "sdk", "mock"):
+        cfg = config.load()
+        cfg._data["ai_mode"] = mode
+        config.save(cfg)
+
+
+def _save_creds(mode: str, api_key=None, oauth_token=None) -> None:
+    data = {"mode": mode}
+    if api_key:
+        data["api_key"] = api_key
+    if oauth_token:
+        data["oauth_token"] = oauth_token
+    _CREDS_PATH.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+
+def _clear_creds() -> None:
+    try:
+        _CREDS_PATH.unlink()
+    except FileNotFoundError:
+        pass
+
+
+def _load_creds():
+    """При старте: восстановить сохранённый выбор в память + окружение + config.json."""
+    if not _CREDS_PATH.exists():
+        return None
+    try:
+        data = json.loads(_CREDS_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    _RUNTIME_KEY["api_key"] = data.get("api_key")
+    _RUNTIME_KEY["oauth_token"] = data.get("oauth_token")
+    if data.get("oauth_token"):
+        os.environ["CLAUDE_CODE_OAUTH_TOKEN"] = data["oauth_token"]
+    _apply_mode(data.get("mode"))
+    return data.get("mode")
+
+
+def _is_configured() -> bool:
+    """True, если пользователь уже выбрал доступ (файл кредов существует)."""
+    return _CREDS_PATH.exists()
+
+
+_load_creds()   # восстановить сохранённый выбор при импорте/старте сервера
 
 
 def _sse(event: dict) -> str:
@@ -89,7 +137,7 @@ def get_config():
             "valid_models": config.VALID_MODELS,
             "dataset_dir": str(cfg.dataset_dir()),
             "has_env_key": bool(os.getenv("ANTHROPIC_API_KEY")),
-            "onboarded": _SESSION["onboarded"],
+            "onboarded": _is_configured(),
             "warnings": cfg.validate()}
 
 
@@ -104,37 +152,37 @@ async def set_config(payload: dict):
     return {"ok": True, "ai_mode": cfg.ai_mode, "model": cfg.model}
 
 
-@app.post("/api/set-key")
-async def set_key(payload: dict):
-    """Принять API-ключ из UI. Хранится ТОЛЬКО в памяти процесса (не в файлах/репо/config.json)."""
-    k = (payload.get("api_key") or "").strip()
-    _RUNTIME_KEY["api_key"] = k or None
-    return {"ok": True, "has_key": bool(_RUNTIME_KEY["api_key"])}
-
-
 @app.post("/api/onboard")
 async def onboard(payload: dict):
-    """Завершить онбординг первого запуска: выбрать режим (api/sdk/mock), при api — принять ключ.
-    Ключ живёт только в памяти. Помечаем сессию onboarded, чтобы модалка не показывалась до рестарта."""
+    """Первый вход: выбрать режим (api/sdk/mock); при api — ключ, при sdk — OAuth-токен.
+    Выбор СОХРАНЯЕТСЯ локально (_CREDS_PATH, в .gitignore) — вводится ОДИН раз, а не при каждом старте.
+    Секрет остаётся на машине пользователя и в публичный репозиторий не попадает."""
     mode = payload.get("mode")
-    if mode in ("api", "sdk", "mock"):
-        cfg = config.load()
-        cfg._data["ai_mode"] = mode
-        config.save(cfg)
-    if mode == "api":
-        k = (payload.get("api_key") or "").strip()
-        _RUNTIME_KEY["api_key"] = k or None
-    if mode == "sdk":
-        # OAuth-токен Claude (из UI). Кладём в память процесса И в переменную окружения,
-        # откуда его берёт claude_agent_sdk. В файлы/репо не пишется.
-        tok = (payload.get("token") or "").strip()
-        _RUNTIME_KEY["oauth_token"] = tok or None
-        if tok:
-            os.environ["CLAUDE_CODE_OAUTH_TOKEN"] = tok
-    _SESSION["onboarded"] = True
-    return {"ok": True, "onboarded": True, "ai_mode": mode,
-            "has_key": bool(_RUNTIME_KEY["api_key"]),
-            "has_token": bool(_RUNTIME_KEY["oauth_token"])}
+    if mode not in ("api", "sdk", "mock"):
+        raise HTTPException(400, "mode must be api, sdk or mock")
+    api_key = ((payload.get("api_key") or "").strip() or None) if mode == "api" else None
+    token = ((payload.get("token") or "").strip() or None) if mode == "sdk" else None
+    _RUNTIME_KEY["api_key"] = api_key
+    _RUNTIME_KEY["oauth_token"] = token
+    if token:
+        os.environ["CLAUDE_CODE_OAUTH_TOKEN"] = token
+    else:
+        os.environ.pop("CLAUDE_CODE_OAUTH_TOKEN", None)
+    _apply_mode(mode)
+    _save_creds(mode, api_key=api_key, oauth_token=token)   # запомнить на будущее
+    return {"ok": True, "onboarded": True, "ai_mode": mode}
+
+
+@app.post("/api/disconnect")
+async def disconnect():
+    """Отменить сохранённый доступ (SDK/API): удалить локальный файл кредов, стереть их из памяти
+    и окружения, сбросить режим в mock. При следующем запуске снова спросит SDK/API."""
+    _clear_creds()
+    _RUNTIME_KEY["api_key"] = None
+    _RUNTIME_KEY["oauth_token"] = None
+    os.environ.pop("CLAUDE_CODE_OAUTH_TOKEN", None)
+    _apply_mode("mock")
+    return {"ok": True, "onboarded": False, "ai_mode": "mock"}
 
 
 @app.get("/api/dataset")

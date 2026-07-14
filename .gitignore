@@ -1,6 +1,7 @@
 # окружение / секреты
 .venv/
 .env
+.local_credentials.json
 __pycache__/
 *.pyc
 

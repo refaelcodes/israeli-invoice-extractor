@@ -27,7 +27,10 @@
   .seg button.on{background:#fff;color:var(--accent)}
   .modebar select{padding:7px 10px;border-radius:9px;border:0;font-size:13px}
   #langSel{background:rgba(255,255,255,.92);color:#222;cursor:pointer}
-  #apiKey{background:rgba(255,255,255,.92);color:#222;border:0;border-radius:8px;padding:6px 9px;font-size:12px;width:200px}
+  .chip{background:rgba(255,255,255,.20);color:#fff;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600}
+  .chip.hidden{display:none}
+  .chip-btn{background:rgba(255,255,255,.92);color:#b91c1c;border:0;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer}
+  .chip-btn.hidden{display:none}
   .setup{position:fixed;inset:0;background:rgba(15,20,30,.75);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
   .setup.hidden{display:none}
   .setup-card{background:#fff;color:#1a1a1a;max-width:460px;width:100%;border-radius:14px;padding:26px 24px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
@@ -118,9 +121,9 @@
   <div class="logo">🔍</div>
   <div><h1 data-i18n="h1">Экстрактор данных</h1><p data-i18n="sub">Vision-LLM извлечение + сверка с ground-truth по полям</p></div>
   <div class="modebar">
-    <div class="seg" id="modeSeg"></div>
+    <span id="connChip" class="chip hidden"></span>
+    <button id="disconnectBtn" class="chip-btn hidden" data-i18n="disconnect">Отключить</button>
     <select id="modelSel" title="model"></select>
-    <input id="apiKey" type="password" autocomplete="off" spellcheck="false" class="hidden">
     <select id="langSel">
       <option value="en">English</option><option value="he">עברית</option><option value="ru">Русский</option>
     </select>
@@ -129,7 +132,6 @@
 
 <div class="wrap">
   <div id="warnBox"></div>
-  <div id="keyNote" class="muted" style="margin-bottom:10px"></div>
   <div class="tabs">
     <button class="on" data-tab="single" data-i18n="tabSingle">Один документ</button>
     <button data-tab="batch" data-i18n="tabBatch">Батч по датасету</button>
@@ -201,9 +203,10 @@ const I18N={
     keyMockHint:"Mock mode runs offline — no key needed (this is the default).",
     setupTitle:"Connect Claude to start", setupApi:"Use API key", setupSdk:"Use SDK (Claude subscription)",
     setupContinue:"Continue", setupDemo:"or just explore the offline demo (mock)",
-    setupSub:"Choose how the extractor reaches Claude. Your key/token is kept in this browser session only — never written to the repo.",
+    setupSub:"Choose how the extractor reaches Claude. Your key/token is saved locally on your machine (git-ignored) so you enter it once — never committed to the repo. Disconnect anytime.",
     setupTokenPh:"Claude OAuth token (sk-ant-oat…)",
     setupSdkHint:"SDK needs a Claude OAuth token — generate one with `claude setup-token`.",
+    connApi:"🔑 API", connSdk:"🔒 SDK", connDemo:"🧪 Demo", disconnect:"Disconnect",
     codes:{LINE_ITEMS_SUM:"Sum of line items ≠ subtotal", VAT_TOTAL:"subtotal + VAT ≠ total",
       VAT_RATE_CALC:"subtotal × VAT rate ≠ VAT amount", LINE_ITEM_MATH:"quantity × unit price ≠ line total",
       PAYSLIP_NET:"gross − deductions ≠ net pay", EARNINGS_SUM:"Sum of earnings ≠ gross",
@@ -234,9 +237,10 @@ const I18N={
     keyMockHint:"מצב Mock פועל לא-מקוון — אין צורך במפתח (זו ברירת המחדל).",
     setupTitle:"התחברו ל-Claude כדי להתחיל", setupApi:"מפתח API", setupSdk:"SDK (מנוי Claude)",
     setupContinue:"המשך", setupDemo:"או רק לצפות בדמו הלא-מקוון (mock)",
-    setupSub:"בחרו כיצד המחלץ מתחבר ל-Claude. המפתח/טוקן נשמר רק בדפדפן הזה — לעולם לא נכתב למאגר.",
+    setupSub:"בחרו כיצד המחלץ מתחבר ל-Claude. המפתח/טוקן נשמר מקומית במחשב שלכם (מוחרג מגיט) כדי שתזינו אותו פעם אחת — לעולם לא נכתב למאגר. אפשר להתנתק בכל רגע.",
     setupTokenPh:"טוקן OAuth של Claude (sk-ant-oat…)",
     setupSdkHint:"מצב SDK דורש טוקן OAuth של Claude — הפיקו אותו עם `claude setup-token`.",
+    connApi:"🔑 API", connSdk:"🔒 SDK", connDemo:"🧪 דמו", disconnect:"התנתק",
     codes:{LINE_ITEMS_SUM:"סכום השורות ≠ סכום ביניים", VAT_TOTAL:"סכום ביניים + מע\"מ ≠ סה\"כ",
       VAT_RATE_CALC:"סכום ביניים × שיעור מע\"מ ≠ סכום מע\"מ", LINE_ITEM_MATH:"כמות × מחיר יחידה ≠ סה\"כ שורה",
       PAYSLIP_NET:"ברוטו − ניכויים ≠ נטו", EARNINGS_SUM:"סכום התשלומים ≠ ברוטו",
@@ -267,9 +271,10 @@ const I18N={
     keyMockHint:"Режим Mock работает офлайн — ключ не нужен (по умолчанию).",
     setupTitle:"Подключите Claude для старта", setupApi:"Ключ API", setupSdk:"SDK (подписка Claude)",
     setupContinue:"Продолжить", setupDemo:"или просто посмотреть офлайн-демо (mock)",
-    setupSub:"Выберите, как экстрактор обращается к Claude. Ключ/токен хранится только в этой вкладке браузера — никогда не пишется в репозиторий.",
+    setupSub:"Выберите, как экстрактор обращается к Claude. Ключ/токен сохраняется локально на вашей машине (в .gitignore) — вводится один раз, в репозиторий не пишется. Отключить можно в любой момент.",
     setupTokenPh:"OAuth-токен Claude (sk-ant-oat…)",
     setupSdkHint:"Режим SDK требует OAuth-токен Claude — сгенерируйте его командой `claude setup-token`.",
+    connApi:"🔑 API", connSdk:"🔒 SDK", connDemo:"🧪 Демо", disconnect:"Отключить",
     codes:{LINE_ITEMS_SUM:"Сумма позиций ≠ subtotal", VAT_TOTAL:"subtotal + НДС ≠ total",
       VAT_RATE_CALC:"subtotal × ставка НДС ≠ сумма НДС", LINE_ITEM_MATH:"кол-во × цена ≠ сумма строки",
       PAYSLIP_NET:"брутто − удержания ≠ нетто", EARNINGS_SUM:"Сумма начислений ≠ брутто",
@@ -294,7 +299,7 @@ function applyLang(lang){
     const st=$('#suTok'); if(st) st.placeholder=t('setupTokenPh'); }
   if(LAST) renderResult(LAST);
   if(LASTREPORT) renderReport(LASTREPORT);
-  updateKeyUI();
+  updateConnUI();
 }
 
 function jsonHighlight(obj){
@@ -310,19 +315,17 @@ function accColor(a){ return a>=0.95?'var(--ok)':a>=0.8?'#c98a00':'var(--err)'; 
 
 async function loadConfig(){
   CFG=await (await fetch('/api/config')).json();
-  $('#modeSeg').innerHTML=CFG.valid_modes.map(m=>`<button data-m="${m}" class="${m===CFG.ai_mode?'on':''}">${m.toUpperCase()}</button>`).join('');
   $('#modelSel').innerHTML=CFG.valid_models.map(m=>`<option ${m===CFG.model?'selected':''}>${m}</option>`).join('');
-  $$('#modeSeg button').forEach(b=>b.onclick=()=>saveConfig({ai_mode:b.dataset.m}));
   $('#modelSel').onchange=()=>saveConfig({model:$('#modelSel').value});
   $('#warnBox').innerHTML=(CFG.warnings||[]).map(w=>`<div class="warn">⚠ ${w}</div>`).join('');
-  updateKeyUI();
+  updateConnUI();
 }
-function updateKeyUI(){
+function updateConnUI(){
   if(!CFG.valid_modes) return;
-  const mode=CFG.ai_mode, inp=$('#apiKey');
-  inp.classList.toggle('hidden', mode!=='api');
-  inp.placeholder=t('apiKeyPh');
-  $('#keyNote').textContent = mode==='api'?t('keyApiHint') : mode==='sdk'?t('keySdkHint') : t('keyMockHint');
+  const mode=CFG.ai_mode;
+  $('#connChip').textContent = mode==='api'?t('connApi') : mode==='sdk'?t('connSdk') : t('connDemo');
+  $('#connChip').classList.toggle('hidden', !CFG.onboarded);
+  $('#disconnectBtn').classList.toggle('hidden', !CFG.onboarded);
 }
 async function saveConfig(patch){
   await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)});
@@ -455,7 +458,7 @@ function renderReport(r){
 }
 
 $('#langSel').onchange=e=>applyLang(e.target.value);
-$('#apiKey').onchange=async e=>{ await fetch('/api/set-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({api_key:e.target.value||null})}); };
+$('#disconnectBtn').onclick=async ()=>{ await fetch('/api/disconnect',{method:'POST'}); await loadConfig(); showSetup(); };
 $('#suApi').onclick=()=>{ $('#suSdkBox').classList.add('hidden'); $('#suApiBox').classList.remove('hidden'); $('#suKey').focus(); };
 $('#suSdk').onclick=()=>{ $('#suApiBox').classList.add('hidden'); $('#suSdkBox').classList.remove('hidden'); $('#suTok').focus(); };
 $('#suApiGo').onclick=()=>{ const k=$('#suKey').value.trim(); if(!k){ $('#suKey').focus(); return; } onboard('api',{api_key:k}); };
