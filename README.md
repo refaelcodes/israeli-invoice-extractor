@@ -9,9 +9,9 @@ layouts it has never seen, without a hand-written rule per template.
 > טופס. כולל **בדיקת דיוק אוטומטית** מול ground-truth ו**ולידציה אריתמטית** שתופסת שגיאות גם ללא
 > ground-truth. שקוף לגבי פרטיות: מצב API בלי אימון על הנתונים, אופציה למודל מקומי, מיסוך PII.
 
-![Sample document the extractor reads](docs/hero.png)
+![Israeli invoice → structured JSON (animated demo)](docs/demo.gif)
 
-*Input: the tax-invoice image above. Output: structured JSON —*
+*Above: a Hebrew tax invoice turned into structured JSON, with an accuracy check — the real output shape:*
 
 ```json
 {
@@ -24,7 +24,7 @@ layouts it has never seen, without a hand-written rule per template.
 }
 ```
 
-*▶️ **2-min demo:** _(video link — coming soon)_*
+*▶️ **Full 2-min walkthrough:** _(video link — coming soon)_ · the GIF above is a quick synthetic preview.*
 
 ---
 
