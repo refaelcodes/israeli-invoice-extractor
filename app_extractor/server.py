@@ -131,7 +131,9 @@ def _truth_index():
 
 @app.get("/", response_class=HTMLResponse)
 def index():
-    return FileResponse(os.path.join(STATIC, "index.html"))
+    # no-cache: чтобы после git pull браузер не показывал устаревший UI из кэша
+    return FileResponse(os.path.join(STATIC, "index.html"),
+                        headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
 
 
 @app.get("/api/config")
