@@ -4,7 +4,7 @@
 automatically check how accurate the result is.** Built with a vision-LLM (Claude) so it works on
 layouts it has never seen, without a hand-written rule per template.
 
-> **בעברית:** חילוץ נתונים ממסמכים פיננסיים ישראליים (חשבוniות, קבלות, תלושי שכר, דפי בנק, שיקים)
+> **בעברית:** חילוץ נתונים ממסמכים פיננסיים ישראליים (חשבוניות, קבלות, תלושי שכר, דפי בנק, שיקים)
 > ל-JSON מובנה, בעזרת Vision-LLM. עובד על מסמכים בעברית (RTL) ותבניות חדשות — בלי חוקים ידניים לכל
 > טופס. כולל **בדיקת דיוק אוטומטית** מול ground-truth ו**ולידציה אריתמטית** שתופסת שגיאות גם ללא
 > ground-truth. שקוף לגבי פרטיות: מצב API בלי אימון על הנתונים, אופציה למודל מקומי, מיסוך PII.
