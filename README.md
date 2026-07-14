@@ -9,7 +9,7 @@ layouts it has never seen, without a hand-written rule per template.
 > טופס. כולל **בדיקת דיוק אוטומטית** מול ground-truth ו**ולידציה אריתמטית** שתופסת שגיאות גם ללא
 > ground-truth. שקוף לגבי פרטיות: מצב API בלי אימון על הנתונים, אופציה למודל מקומי, מיסוך PII.
 
-![Sample document the extractor reads](01_invoice_tax/01_invoice_tax_1.png)
+![Sample document the extractor reads](docs/hero.png)
 
 *Input: the tax-invoice image above. Output: structured JSON —*
 
