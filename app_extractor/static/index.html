@@ -38,8 +38,11 @@
   .setup-actions{display:flex;gap:10px;margin:18px 0 8px;flex-wrap:wrap}
   .setup-actions .go{flex:1;min-width:150px;margin:0}
   .go.alt{background:#334155}
-  #suApiBox,#suSdkBox{display:flex;gap:8px;margin:10px 0 4px}
-  #suKey,#suTok{flex:1;border:1px solid #cbd5e1;border-radius:8px;padding:9px 10px;font-size:13px}
+  #suApiBox,#suSdkBox{margin:12px 0 4px}
+  #suKey{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:8px;padding:9px 10px;font-size:13px}
+  .remember{display:flex;align-items:center;gap:7px;margin:9px 0 11px;font-size:13px;color:#555;cursor:pointer}
+  .remember input{margin:0;width:15px;height:15px}
+  #suApiGo,#suSdkGo{width:100%;margin:0}
   #suDemo{display:inline-block;margin-top:12px;color:#64748b;font-size:12px;cursor:pointer;text-decoration:underline}
   .wrap{max-width:1400px;margin:0 auto;padding:22px 30px}
   .tabs{display:flex;gap:8px;margin-bottom:18px}
@@ -107,13 +110,14 @@
     </div>
     <div id="suApiBox" class="hidden">
       <input id="suKey" type="password" autocomplete="off" spellcheck="false">
-      <button class="go" id="suApiGo" style="max-width:130px;margin:0" data-i18n="setupContinue">Continue</button>
+      <label class="remember"><input type="checkbox" id="suApiRemember"><span data-i18n="rememberLabel"></span></label>
+      <button class="go" id="suApiGo" data-i18n="setupContinue">Continue</button>
     </div>
     <div id="suSdkBox" class="hidden">
-      <input id="suTok" type="password" autocomplete="off" spellcheck="false">
-      <button class="go" id="suSdkGo" style="max-width:130px;margin:0" data-i18n="setupContinue">Continue</button>
+      <p class="muted small" data-i18n="setupSdkHint"></p>
+      <label class="remember"><input type="checkbox" id="suSdkRemember"><span data-i18n="rememberLabel"></span></label>
+      <button class="go" id="suSdkGo" data-i18n="setupContinue">Continue</button>
     </div>
-    <p class="muted small" data-i18n="setupSdkHint"></p>
     <span id="suDemo" data-i18n="setupDemo"></span>
   </div>
 </div>
@@ -204,8 +208,8 @@ const I18N={
     setupTitle:"Connect Claude to start", setupApi:"Use API key", setupSdk:"Use SDK (Claude subscription)",
     setupContinue:"Continue", setupDemo:"or just explore the offline demo (mock)",
     setupSub:"Choose how the extractor reaches Claude. Your key/token is saved locally on your machine (git-ignored) so you enter it once — never committed to the repo. Disconnect anytime.",
-    setupTokenPh:"Claude OAuth token (sk-ant-oat…)",
-    setupSdkHint:"SDK needs a Claude OAuth token — generate one with `claude setup-token`.",
+    setupSdkHint:"SDK mode uses the Claude subscription already logged in on this computer — no token needed.",
+    rememberLabel:"Remember on this device",
     connApi:"🔑 API", connSdk:"🔒 SDK", connDemo:"🧪 Demo", disconnect:"Disconnect",
     codes:{LINE_ITEMS_SUM:"Sum of line items ≠ subtotal", VAT_TOTAL:"subtotal + VAT ≠ total",
       VAT_RATE_CALC:"subtotal × VAT rate ≠ VAT amount", LINE_ITEM_MATH:"quantity × unit price ≠ line total",
@@ -238,8 +242,8 @@ const I18N={
     setupTitle:"התחברו ל-Claude כדי להתחיל", setupApi:"מפתח API", setupSdk:"SDK (מנוי Claude)",
     setupContinue:"המשך", setupDemo:"או רק לצפות בדמו הלא-מקוון (mock)",
     setupSub:"בחרו כיצד המחלץ מתחבר ל-Claude. המפתח/טוקן נשמר מקומית במחשב שלכם (מוחרג מגיט) כדי שתזינו אותו פעם אחת — לעולם לא נכתב למאגר. אפשר להתנתק בכל רגע.",
-    setupTokenPh:"טוקן OAuth של Claude (sk-ant-oat…)",
-    setupSdkHint:"מצב SDK דורש טוקן OAuth של Claude — הפיקו אותו עם `claude setup-token`.",
+    setupSdkHint:"מצב SDK משתמש במנוי Claude שכבר מחובר במחשב הזה — ללא טוקן.",
+    rememberLabel:"לזכור במכשיר הזה",
     connApi:"🔑 API", connSdk:"🔒 SDK", connDemo:"🧪 דמו", disconnect:"התנתק",
     codes:{LINE_ITEMS_SUM:"סכום השורות ≠ סכום ביניים", VAT_TOTAL:"סכום ביניים + מע\"מ ≠ סה\"כ",
       VAT_RATE_CALC:"סכום ביניים × שיעור מע\"מ ≠ סכום מע\"מ", LINE_ITEM_MATH:"כמות × מחיר יחידה ≠ סה\"כ שורה",
@@ -272,8 +276,8 @@ const I18N={
     setupTitle:"Подключите Claude для старта", setupApi:"Ключ API", setupSdk:"SDK (подписка Claude)",
     setupContinue:"Продолжить", setupDemo:"или просто посмотреть офлайн-демо (mock)",
     setupSub:"Выберите, как экстрактор обращается к Claude. Ключ/токен сохраняется локально на вашей машине (в .gitignore) — вводится один раз, в репозиторий не пишется. Отключить можно в любой момент.",
-    setupTokenPh:"OAuth-токен Claude (sk-ant-oat…)",
-    setupSdkHint:"Режим SDK требует OAuth-токен Claude — сгенерируйте его командой `claude setup-token`.",
+    setupSdkHint:"Режим SDK использует подписку Claude, уже вошедшую на этом компьютере — токен не нужен.",
+    rememberLabel:"Запомнить на этом устройстве",
     connApi:"🔑 API", connSdk:"🔒 SDK", connDemo:"🧪 Демо", disconnect:"Отключить",
     codes:{LINE_ITEMS_SUM:"Сумма позиций ≠ subtotal", VAT_TOTAL:"subtotal + НДС ≠ total",
       VAT_RATE_CALC:"subtotal × ставка НДС ≠ сумма НДС", LINE_ITEM_MATH:"кол-во × цена ≠ сумма строки",
@@ -295,8 +299,7 @@ function applyLang(lang){
   $('#langSel').value=lang;
   const opt0=$('#docSel').querySelector('option[value=""]'); if(opt0) opt0.textContent=t('selectDataset');
   if(!UPLOAD) $('#dropText').textContent=t('dropText');
-  { const sk=$('#suKey'); if(sk) sk.placeholder=t('apiKeyPh');
-    const st=$('#suTok'); if(st) st.placeholder=t('setupTokenPh'); }
+  { const sk=$('#suKey'); if(sk) sk.placeholder=t('apiKeyPh'); }
   if(LAST) renderResult(LAST);
   if(LASTREPORT) renderReport(LASTREPORT);
   updateConnUI();
@@ -332,8 +335,7 @@ async function saveConfig(patch){
   await loadConfig();
 }
 function showSetup(){ $('#setup').classList.remove('hidden');
-  const sk=$('#suKey'); if(sk) sk.placeholder=t('apiKeyPh');
-  const st=$('#suTok'); if(st) st.placeholder=t('setupTokenPh'); }
+  const sk=$('#suKey'); if(sk) sk.placeholder=t('apiKeyPh'); }
 function hideSetup(){ $('#setup').classList.add('hidden'); }
 async function onboard(mode, extra){
   await fetch('/api/onboard',{method:'POST',headers:{'Content-Type':'application/json'},
@@ -460,11 +462,10 @@ function renderReport(r){
 $('#langSel').onchange=e=>applyLang(e.target.value);
 $('#disconnectBtn').onclick=async ()=>{ await fetch('/api/disconnect',{method:'POST'}); await loadConfig(); showSetup(); };
 $('#suApi').onclick=()=>{ $('#suSdkBox').classList.add('hidden'); $('#suApiBox').classList.remove('hidden'); $('#suKey').focus(); };
-$('#suSdk').onclick=()=>{ $('#suApiBox').classList.add('hidden'); $('#suSdkBox').classList.remove('hidden'); $('#suTok').focus(); };
-$('#suApiGo').onclick=()=>{ const k=$('#suKey').value.trim(); if(!k){ $('#suKey').focus(); return; } onboard('api',{api_key:k}); };
-$('#suSdkGo').onclick=()=>{ const tk=$('#suTok').value.trim(); if(!tk){ $('#suTok').focus(); return; } onboard('sdk',{token:tk}); };
+$('#suSdk').onclick=()=>{ $('#suApiBox').classList.add('hidden'); $('#suSdkBox').classList.remove('hidden'); };
+$('#suApiGo').onclick=()=>{ const k=$('#suKey').value.trim(); if(!k){ $('#suKey').focus(); return; } onboard('api',{api_key:k, remember:$('#suApiRemember').checked}); };
+$('#suSdkGo').onclick=()=>{ onboard('sdk',{remember:$('#suSdkRemember').checked}); };
 $('#suKey').onkeydown=e=>{ if(e.key==='Enter') $('#suApiGo').click(); };
-$('#suTok').onkeydown=e=>{ if(e.key==='Enter') $('#suSdkGo').click(); };
 $('#suDemo').onclick=()=>onboard('mock');
 (async()=>{ await loadConfig(); await loadDataset(); applyLang(LANG); if(!CFG.onboarded) showSetup(); })();
 </script>

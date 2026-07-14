@@ -42,6 +42,10 @@ _CREDS_PATH = paths.PROJECT_ROOT / ".local_credentials.json"
 # Активные креды в памяти процесса (загружаются из _CREDS_PATH при старте).
 _RUNTIME_KEY = {"api_key": None, "oauth_token": None}
 
+# Онбординг ТЕКУЩЕЙ сессии: True, если пользователь уже выбрал доступ в этот запуск (в т.ч. без
+# «запомнить»). При рестарте сбрасывается; если креды сохранены на диск — восстанавливается в _load_creds().
+_SESSION = {"onboarded": False}
+
 
 def _apply_mode(mode: str) -> None:
     """Записать выбранный режим в config.json, чтобы извлечение брало нужный провайдер."""
@@ -80,6 +84,7 @@ def _load_creds():
     if data.get("oauth_token"):
         os.environ["CLAUDE_CODE_OAUTH_TOKEN"] = data["oauth_token"]
     _apply_mode(data.get("mode"))
+    _SESSION["onboarded"] = True
     return data.get("mode")
 
 
@@ -137,7 +142,7 @@ def get_config():
             "valid_models": config.VALID_MODELS,
             "dataset_dir": str(cfg.dataset_dir()),
             "has_env_key": bool(os.getenv("ANTHROPIC_API_KEY")),
-            "onboarded": _is_configured(),
+            "onboarded": _SESSION["onboarded"],
             "warnings": cfg.validate()}
 
 
@@ -154,34 +159,40 @@ async def set_config(payload: dict):
 
 @app.post("/api/onboard")
 async def onboard(payload: dict):
-    """Первый вход: выбрать режим (api/sdk/mock); при api — ключ, при sdk — OAuth-токен.
-    Выбор СОХРАНЯЕТСЯ локально (_CREDS_PATH, в .gitignore) — вводится ОДИН раз, а не при каждом старте.
-    Секрет остаётся на машине пользователя и в публичный репозиторий не попадает."""
+    """Первый вход: выбрать режим (api/sdk/mock).
+      api  — принять СВОЙ ключ Anthropic;
+      sdk  — БЕЗ токена: использует уже выполненный на этой машине `claude login` (подписку Claude);
+      mock — офлайн-демо.
+    Секрет пишется на диск ТОЛЬКО при remember=true (галочка «запомнить»). Иначе живёт лишь в памяти
+    процесса и стирается при перезапуске -> при следующем старте снова спросит. Файл кредов — в
+    .gitignore, в публичный репозиторий не попадает."""
     mode = payload.get("mode")
     if mode not in ("api", "sdk", "mock"):
         raise HTTPException(400, "mode must be api, sdk or mock")
+    remember = bool(payload.get("remember"))
     api_key = ((payload.get("api_key") or "").strip() or None) if mode == "api" else None
-    token = ((payload.get("token") or "").strip() or None) if mode == "sdk" else None
     _RUNTIME_KEY["api_key"] = api_key
-    _RUNTIME_KEY["oauth_token"] = token
-    if token:
-        os.environ["CLAUDE_CODE_OAUTH_TOKEN"] = token
-    else:
-        os.environ.pop("CLAUDE_CODE_OAUTH_TOKEN", None)
+    # SDK не использует токен из UI — авторизация берётся из системного `claude login`
+    # (или из CLAUDE_CODE_OAUTH_TOKEN в .env, если пользователь задал его сам).
     _apply_mode(mode)
-    _save_creds(mode, api_key=api_key, oauth_token=token)   # запомнить на будущее
-    return {"ok": True, "onboarded": True, "ai_mode": mode}
+    if remember:
+        _save_creds(mode, api_key=api_key)   # запомнить на этой машине
+    else:
+        _clear_creds()                        # не запоминать -> файла нет, при рестарте спросит снова
+    _SESSION["onboarded"] = True
+    return {"ok": True, "onboarded": True, "ai_mode": mode, "remembered": remember}
 
 
 @app.post("/api/disconnect")
 async def disconnect():
-    """Отменить сохранённый доступ (SDK/API): удалить локальный файл кредов, стереть их из памяти
-    и окружения, сбросить режим в mock. При следующем запуске снова спросит SDK/API."""
+    """Отменить доступ: удалить сохранённый файл кредов, стереть ключ из памяти, сбросить режим в mock.
+    При следующем запуске снова спросит SDK/API."""
     _clear_creds()
     _RUNTIME_KEY["api_key"] = None
     _RUNTIME_KEY["oauth_token"] = None
     os.environ.pop("CLAUDE_CODE_OAUTH_TOKEN", None)
     _apply_mode("mock")
+    _SESSION["onboarded"] = False
     return {"ok": True, "onboarded": False, "ai_mode": "mock"}
 
 

@@ -57,11 +57,11 @@ python app_extractor/server.py             # opens http://127.0.0.1:8002
 ```
 
 **On first launch the app asks how to connect to Claude** — enter **your own API key**, use **SDK**
-(paste a Claude OAuth token, generated with `claude setup-token`), or pick **offline demo (mock)** to
-explore without a key. You enter it **once**: the choice is saved locally in a **git-ignored**
-`.local_credentials.json` on your machine (never committed, no key ships in the repo), so later
-launches skip the prompt. A **Disconnect** button in the header clears it — the next launch asks
-again. See [Data & privacy](#data--privacy--נתונים-ופרטיות) below.
+(uses the Claude subscription already logged in via `claude login` — **no token**), or pick **offline
+demo (mock)**. Tick **Remember on this device** to save the choice locally in a **git-ignored**
+`.local_credentials.json` (never committed) so later launches skip the prompt; leave it unticked and
+the key is kept only for the session. A **Disconnect** button in the header clears it and re-asks on
+the next launch. See [Data & privacy](#data--privacy--נתונים-ופרטיות) below.
 
 CLI equivalents:
 
@@ -123,12 +123,12 @@ explicit about it:
 - **Three AI modes**, chosen once in the first-run prompt (and clearable via **Disconnect**):
   - `mock` — fully offline, no data leaves the machine (default before you connect).
   - `api` — direct Anthropic API. You supply **your own** key in the prompt (or set `ANTHROPIC_API_KEY`
-    in `.env`). The key is saved **only** in a git-ignored `.local_credentials.json` on your machine —
-    **never committed to the repo**. For business/API use, **inputs are not used to train models**, and
-    data is retained only briefly (Zero-Data-Retention options exist). Use this for third-party docs.
-  - `sdk` — your personal Claude subscription via an **OAuth token** you supply (generate with
-    `claude setup-token`). Stored the same way (git-ignored, local only). Fine for your own
-    development, **not** for clients' data.
+    in `.env`). The key is kept in memory for the session, and written to a git-ignored
+    `.local_credentials.json` **only if you tick "Remember"** — **never committed to the repo**. For
+    business/API use, **inputs are not used to train models**, and data is retained only briefly
+    (Zero-Data-Retention options exist). Use this for third-party docs.
+  - `sdk` — your personal Claude subscription; uses the login already on the machine (`claude login`),
+    **no token entered in the app**. Fine for your own development, **not** for clients' data.
 - **Local-model option (roadmap):** the transport is abstracted, so a self-hosted model (e.g. Ollama)
   can be added for on-premise, fully-local extraction.
 - **PII stays out of the repo:** your key/token lives only in the git-ignored `.local_credentials.json`,
