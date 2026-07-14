@@ -34,66 +34,57 @@ from _core import config, ai_provider, validate, paths  # noqa: E402
 app = FastAPI(title="Israeli Docs — Экстрактор")
 STATIC = os.path.join(_HERE, "static")
 
-# Локальное хранилище выбранного доступа к Claude. Файл лежит в .gitignore и в публичный
-# репозиторий НЕ попадает — он на машине пользователя, чтобы ввести ключ/токен ОДИН раз, а не при
-# каждом запуске. Кнопка «Отключить» удаляет этот файл -> при следующем старте снова спросит.
+# Локальное хранилище подключений к Claude (git-ignored, в репозиторий НЕ попадает — на машине
+# пользователя). Пишется ТОЛЬКО когда стоит галочка «запомнить». В памяти процесса:
+#   api_key — ключ для режима api;  sdk — пользователь подтвердил режим sdk (авторизация берётся из
+# системного `claude login`). Активный режим (api/sdk/mock) хранится отдельно в config.json.
 _CREDS_PATH = paths.PROJECT_ROOT / ".local_credentials.json"
+_RUNTIME = {"api_key": None, "sdk": False}
 
-# Активные креды в памяти процесса (загружаются из _CREDS_PATH при старте).
-_RUNTIME_KEY = {"api_key": None, "oauth_token": None}
 
-# Онбординг ТЕКУЩЕЙ сессии: True, если пользователь уже выбрал доступ в этот запуск (в т.ч. без
-# «запомнить»). При рестарте сбрасывается; если креды сохранены на диск — восстанавливается в _load_creds().
-_SESSION = {"onboarded": False}
+def _read_saved() -> dict:
+    if not _CREDS_PATH.exists():
+        return {}
+    try:
+        return json.loads(_CREDS_PATH.read_text(encoding="utf-8")) or {}
+    except Exception:
+        return {}
+
+
+def _write_saved(d: dict) -> None:
+    d = {k: v for k, v in d.items() if v}     # пустое/False не храним
+    if d:
+        _CREDS_PATH.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
+    else:
+        try:
+            _CREDS_PATH.unlink()
+        except FileNotFoundError:
+            pass
 
 
 def _apply_mode(mode: str) -> None:
-    """Записать выбранный режим в config.json, чтобы извлечение брало нужный провайдер."""
+    """Записать активный режим в config.json, чтобы извлечение брало нужный провайдер."""
     if mode in ("api", "sdk", "mock"):
         cfg = config.load()
         cfg._data["ai_mode"] = mode
         config.save(cfg)
 
 
-def _save_creds(mode: str, api_key=None, oauth_token=None) -> None:
-    data = {"mode": mode}
-    if api_key:
-        data["api_key"] = api_key
-    if oauth_token:
-        data["oauth_token"] = oauth_token
-    _CREDS_PATH.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+def _connected(mode: str) -> bool:
+    """Подключён ли режим: mock — всегда; api — есть ключ; sdk — подтверждён пользователем."""
+    if mode == "mock":
+        return True
+    if mode == "api":
+        return bool(_RUNTIME["api_key"])
+    if mode == "sdk":
+        return bool(_RUNTIME["sdk"])
+    return False
 
 
-def _clear_creds() -> None:
-    try:
-        _CREDS_PATH.unlink()
-    except FileNotFoundError:
-        pass
-
-
-def _load_creds():
-    """При старте: восстановить сохранённый выбор в память + окружение + config.json."""
-    if not _CREDS_PATH.exists():
-        return None
-    try:
-        data = json.loads(_CREDS_PATH.read_text(encoding="utf-8"))
-    except Exception:
-        return None
-    _RUNTIME_KEY["api_key"] = data.get("api_key")
-    _RUNTIME_KEY["oauth_token"] = data.get("oauth_token")
-    if data.get("oauth_token"):
-        os.environ["CLAUDE_CODE_OAUTH_TOKEN"] = data["oauth_token"]
-    _apply_mode(data.get("mode"))
-    _SESSION["onboarded"] = True
-    return data.get("mode")
-
-
-def _is_configured() -> bool:
-    """True, если пользователь уже выбрал доступ (файл кредов существует)."""
-    return _CREDS_PATH.exists()
-
-
-_load_creds()   # восстановить сохранённый выбор при импорте/старте сервера
+# Восстановить сохранённые подключения при старте (активный режим берётся из config.json как есть).
+_saved = _read_saved()
+_RUNTIME["api_key"] = _saved.get("api_key")
+_RUNTIME["sdk"] = bool(_saved.get("sdk"))
 
 
 def _sse(event: dict) -> str:
@@ -143,8 +134,7 @@ def get_config():
             "valid_modes": list(ai_provider._PROVIDERS.keys()),
             "valid_models": config.VALID_MODELS,
             "dataset_dir": str(cfg.dataset_dir()),
-            "has_env_key": bool(os.getenv("ANTHROPIC_API_KEY")),
-            "onboarded": _SESSION["onboarded"],
+            "connected": _connected(cfg.ai_mode),
             "warnings": cfg.validate()}
 
 
@@ -159,43 +149,53 @@ async def set_config(payload: dict):
     return {"ok": True, "ai_mode": cfg.ai_mode, "model": cfg.model}
 
 
-@app.post("/api/onboard")
-async def onboard(payload: dict):
-    """Первый вход: выбрать режим (api/sdk/mock).
-      api  — принять СВОЙ ключ Anthropic;
-      sdk  — БЕЗ токена: использует уже выполненный на этой машине `claude login` (подписку Claude);
-      mock — офлайн-демо.
-    Секрет пишется на диск ТОЛЬКО при remember=true (галочка «запомнить»). Иначе живёт лишь в памяти
-    процесса и стирается при перезапуске -> при следующем старте снова спросит. Файл кредов — в
-    .gitignore, в публичный репозиторий не попадает."""
+@app.post("/api/connect")
+async def connect(payload: dict):
+    """Подключить режим:
+      api — принять СВОЙ ключ Anthropic (обязателен);
+      sdk — БЕЗ токена: использует уже выполненный на этой машине `claude login` (подписку Claude).
+    Делает режим активным. Секрет пишется на диск ТОЛЬКО при remember=true (иначе живёт лишь в памяти
+    процесса — при рестарте снова попросит). Файл кредов — в .gitignore, в репозиторий не попадает."""
     mode = payload.get("mode")
-    if mode not in ("api", "sdk", "mock"):
-        raise HTTPException(400, "mode must be api, sdk or mock")
+    if mode not in ("api", "sdk"):
+        raise HTTPException(400, "mode must be api or sdk")
     remember = bool(payload.get("remember"))
-    api_key = ((payload.get("api_key") or "").strip() or None) if mode == "api" else None
-    _RUNTIME_KEY["api_key"] = api_key
-    # SDK не использует токен из UI — авторизация берётся из системного `claude login`
-    # (или из CLAUDE_CODE_OAUTH_TOKEN в .env, если пользователь задал его сам).
+    saved = _read_saved()
+    if mode == "api":
+        key = (payload.get("api_key") or "").strip() or None
+        if not key:
+            raise HTTPException(400, "api_key required")
+        _RUNTIME["api_key"] = key
+        if remember:
+            saved["api_key"] = key
+        else:
+            saved.pop("api_key", None)
+    else:  # sdk
+        _RUNTIME["sdk"] = True
+        if remember:
+            saved["sdk"] = True
+        else:
+            saved.pop("sdk", None)
+    _write_saved(saved)
     _apply_mode(mode)
-    if remember:
-        _save_creds(mode, api_key=api_key)   # запомнить на этой машине
-    else:
-        _clear_creds()                        # не запоминать -> файла нет, при рестарте спросит снова
-    _SESSION["onboarded"] = True
-    return {"ok": True, "onboarded": True, "ai_mode": mode, "remembered": remember}
+    return {"ok": True, "ai_mode": mode, "connected": True, "remembered": remember}
 
 
 @app.post("/api/disconnect")
-async def disconnect():
-    """Отменить доступ: удалить сохранённый файл кредов, стереть ключ из памяти, сбросить режим в mock.
-    При следующем запуске снова спросит SDK/API."""
-    _clear_creds()
-    _RUNTIME_KEY["api_key"] = None
-    _RUNTIME_KEY["oauth_token"] = None
-    os.environ.pop("CLAUDE_CODE_OAUTH_TOKEN", None)
-    _apply_mode("mock")
-    _SESSION["onboarded"] = False
-    return {"ok": True, "onboarded": False, "ai_mode": "mock"}
+async def disconnect(payload: dict = None):
+    """Отключить режим (api или sdk): стереть его подключение из памяти и с диска. Активный режим
+    остаётся тем же -> кнопка станет «Подключить». Режим mock отключать нечего."""
+    cfg = config.load()
+    mode = (payload or {}).get("mode") or cfg.ai_mode
+    saved = _read_saved()
+    if mode == "api":
+        _RUNTIME["api_key"] = None
+        saved.pop("api_key", None)
+    elif mode == "sdk":
+        _RUNTIME["sdk"] = False
+        saved.pop("sdk", None)
+    _write_saved(saved)
+    return {"ok": True, "ai_mode": mode, "connected": _connected(mode)}
 
 
 @app.get("/api/dataset")
@@ -225,7 +225,7 @@ async def extract_doc(payload: dict):
         raise HTTPException(404, "unknown document id")
     cfg = config.load()
     png_abs = str(cfg.dataset_dir() / idx[did]["png"])
-    key = _RUNTIME_KEY["api_key"]
+    key = _RUNTIME["api_key"]
     fields = await asyncio.to_thread(lambda: extract.extract(png_abs, cfg, api_key=key))
     comparison = batch.compare_one(idx[did]["fields"], fields)
     return {"id": did, "mode": cfg.ai_mode, "model": cfg.model,
@@ -243,7 +243,7 @@ async def extract_upload(file: UploadFile = File(...)):
     try:
         tmp.write(data)
         tmp.close()
-        key = _RUNTIME_KEY["api_key"]
+        key = _RUNTIME["api_key"]
         fields = await asyncio.to_thread(lambda: extract.extract(tmp.name, cfg, api_key=key))
     finally:
         os.unlink(tmp.name)
@@ -267,7 +267,7 @@ async def run_batch_stream():
         def work():
             try:
                 report = batch.run_batch(dataset_dir, pred_dir, cfg=cfg, progress=q.put,
-                                         api_key=_RUNTIME_KEY["api_key"])
+                                         api_key=_RUNTIME["api_key"])
                 q.put({"stage": "report", "report": report})
             except Exception as e:  # noqa: BLE001
                 q.put({"stage": "error", "message": f"Ошибка: {e}"})

@@ -29,8 +29,10 @@
   #langSel{background:rgba(255,255,255,.92);color:#222;cursor:pointer}
   .chip{background:rgba(255,255,255,.20);color:#fff;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600}
   .chip.hidden{display:none}
-  .chip-btn{background:rgba(255,255,255,.92);color:#b91c1c;border:0;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer}
+  .chip-btn{background:rgba(255,255,255,.92);border:0;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer}
   .chip-btn.hidden{display:none}
+  .chip-btn.connect{color:#0a7c53}
+  .chip-btn.disconnect{color:#b91c1c}
   .setup{position:fixed;inset:0;background:rgba(15,20,30,.75);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
   .setup.hidden{display:none}
   .setup-card{background:#fff;color:#1a1a1a;max-width:460px;width:100%;border-radius:14px;padding:26px 24px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
@@ -42,8 +44,6 @@
   #suKey{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:8px;padding:9px 10px;font-size:13px}
   .remember{display:flex;align-items:center;gap:7px;margin:9px 0 11px;font-size:13px;color:#555;cursor:pointer}
   .remember input{margin:0;width:15px;height:15px}
-  #suApiGo,#suSdkGo{width:100%;margin:0}
-  #suDemo{display:inline-block;margin-top:12px;color:#64748b;font-size:12px;cursor:pointer;text-decoration:underline}
   .wrap{max-width:1400px;margin:0 auto;padding:22px 30px}
   .tabs{display:flex;gap:8px;margin-bottom:18px}
   .tabs button{padding:10px 18px;border:1px solid var(--line);background:var(--panel);color:var(--ink);
@@ -104,29 +104,29 @@
   <div class="setup-card">
     <h2 data-i18n="setupTitle">חיבור Claude</h2>
     <p class="muted" data-i18n="setupSub"></p>
-    <div class="setup-actions">
-      <button class="go" id="suApi" data-i18n="setupApi">API key</button>
-      <button class="go alt" id="suSdk" data-i18n="setupSdk">SDK</button>
-    </div>
     <div id="suApiBox" class="hidden">
       <input id="suKey" type="password" autocomplete="off" spellcheck="false">
-      <label class="remember"><input type="checkbox" id="suApiRemember"><span data-i18n="rememberLabel"></span></label>
-      <button class="go" id="suApiGo" data-i18n="setupContinue">Continue</button>
     </div>
     <div id="suSdkBox" class="hidden">
       <p class="muted small" data-i18n="setupSdkHint"></p>
-      <label class="remember"><input type="checkbox" id="suSdkRemember"><span data-i18n="rememberLabel"></span></label>
-      <button class="go" id="suSdkGo" data-i18n="setupContinue">Continue</button>
     </div>
-    <span id="suDemo" data-i18n="setupDemo"></span>
+    <label class="remember"><input type="checkbox" id="suRemember"><span data-i18n="rememberLabel"></span></label>
+    <div class="setup-actions">
+      <button class="go" id="suGo" data-i18n="setupContinue">Continue</button>
+      <button class="go alt" id="suCancel" data-i18n="cancel">Cancel</button>
+    </div>
   </div>
 </div>
 <header>
   <div class="logo">🔍</div>
   <div><h1 data-i18n="h1">Экстрактор данных</h1><p data-i18n="sub">Vision-LLM извлечение + сверка с ground-truth по полям</p></div>
   <div class="modebar">
-    <span id="connChip" class="chip hidden"></span>
-    <button id="disconnectBtn" class="chip-btn hidden" data-i18n="disconnect">Отключить</button>
+    <div class="seg" id="modeSeg">
+      <button data-m="api">API</button>
+      <button data-m="sdk">SDK</button>
+      <button data-m="mock">MOCK</button>
+    </div>
+    <button id="connBtn" class="chip-btn hidden"></button>
     <select id="modelSel" title="model"></select>
     <select id="langSel">
       <option value="en">English</option><option value="he">עברית</option><option value="ru">Русский</option>
@@ -207,10 +207,10 @@ const I18N={
     keyMockHint:"Mock mode runs offline — no key needed (this is the default).",
     setupTitle:"Connect Claude to start", setupApi:"Use API key", setupSdk:"Use SDK (Claude subscription)",
     setupContinue:"Continue", setupDemo:"or just explore the offline demo (mock)",
-    setupSub:"Choose how the extractor reaches Claude. Your key/token is saved locally on your machine (git-ignored) so you enter it once — never committed to the repo. Disconnect anytime.",
+    setupSub:"Your key is kept in memory for this session, and saved locally (git-ignored) only if you tick Remember — never committed to the repo.",
     setupSdkHint:"SDK mode uses the Claude subscription already logged in on this computer — no token needed.",
     rememberLabel:"Remember on this device",
-    connApi:"🔑 API", connSdk:"🔒 SDK", connDemo:"🧪 Demo", disconnect:"Disconnect",
+    connect:"Connect", disconnect:"Disconnect", cancel:"Cancel",
     codes:{LINE_ITEMS_SUM:"Sum of line items ≠ subtotal", VAT_TOTAL:"subtotal + VAT ≠ total",
       VAT_RATE_CALC:"subtotal × VAT rate ≠ VAT amount", LINE_ITEM_MATH:"quantity × unit price ≠ line total",
       PAYSLIP_NET:"gross − deductions ≠ net pay", EARNINGS_SUM:"Sum of earnings ≠ gross",
@@ -241,10 +241,10 @@ const I18N={
     keyMockHint:"מצב Mock פועל לא-מקוון — אין צורך במפתח (זו ברירת המחדל).",
     setupTitle:"התחברו ל-Claude כדי להתחיל", setupApi:"מפתח API", setupSdk:"SDK (מנוי Claude)",
     setupContinue:"המשך", setupDemo:"או רק לצפות בדמו הלא-מקוון (mock)",
-    setupSub:"בחרו כיצד המחלץ מתחבר ל-Claude. המפתח/טוקן נשמר מקומית במחשב שלכם (מוחרג מגיט) כדי שתזינו אותו פעם אחת — לעולם לא נכתב למאגר. אפשר להתנתק בכל רגע.",
+    setupSub:"המפתח נשמר בזיכרון למשך ההפעלה, ומקומית (מוחרג מגיט) רק אם תסמנו «לזכור» — לעולם לא נכתב למאגר.",
     setupSdkHint:"מצב SDK משתמש במנוי Claude שכבר מחובר במחשב הזה — ללא טוקן.",
     rememberLabel:"לזכור במכשיר הזה",
-    connApi:"🔑 API", connSdk:"🔒 SDK", connDemo:"🧪 דמו", disconnect:"התנתק",
+    connect:"התחבר", disconnect:"התנתק", cancel:"ביטול",
     codes:{LINE_ITEMS_SUM:"סכום השורות ≠ סכום ביניים", VAT_TOTAL:"סכום ביניים + מע\"מ ≠ סה\"כ",
       VAT_RATE_CALC:"סכום ביניים × שיעור מע\"מ ≠ סכום מע\"מ", LINE_ITEM_MATH:"כמות × מחיר יחידה ≠ סה\"כ שורה",
       PAYSLIP_NET:"ברוטו − ניכויים ≠ נטו", EARNINGS_SUM:"סכום התשלומים ≠ ברוטו",
@@ -275,10 +275,10 @@ const I18N={
     keyMockHint:"Режим Mock работает офлайн — ключ не нужен (по умолчанию).",
     setupTitle:"Подключите Claude для старта", setupApi:"Ключ API", setupSdk:"SDK (подписка Claude)",
     setupContinue:"Продолжить", setupDemo:"или просто посмотреть офлайн-демо (mock)",
-    setupSub:"Выберите, как экстрактор обращается к Claude. Ключ/токен сохраняется локально на вашей машине (в .gitignore) — вводится один раз, в репозиторий не пишется. Отключить можно в любой момент.",
+    setupSub:"Ключ хранится в памяти на время сессии и локально (в .gitignore) только если отметить «Запомнить» — в репозиторий не пишется.",
     setupSdkHint:"Режим SDK использует подписку Claude, уже вошедшую на этом компьютере — токен не нужен.",
     rememberLabel:"Запомнить на этом устройстве",
-    connApi:"🔑 API", connSdk:"🔒 SDK", connDemo:"🧪 Демо", disconnect:"Отключить",
+    connect:"Подключить", disconnect:"Отключить", cancel:"Отмена",
     codes:{LINE_ITEMS_SUM:"Сумма позиций ≠ subtotal", VAT_TOTAL:"subtotal + НДС ≠ total",
       VAT_RATE_CALC:"subtotal × ставка НДС ≠ сумма НДС", LINE_ITEM_MATH:"кол-во × цена ≠ сумма строки",
       PAYSLIP_NET:"брутто − удержания ≠ нетто", EARNINGS_SUM:"Сумма начислений ≠ брутто",
@@ -320,27 +320,54 @@ async function loadConfig(){
   CFG=await (await fetch('/api/config')).json();
   $('#modelSel').innerHTML=CFG.valid_models.map(m=>`<option ${m===CFG.model?'selected':''}>${m}</option>`).join('');
   $('#modelSel').onchange=()=>saveConfig({model:$('#modelSel').value});
+  $$('#modeSeg button').forEach(b=>b.onclick=()=>selectMode(b.dataset.m));
   $('#warnBox').innerHTML=(CFG.warnings||[]).map(w=>`<div class="warn">⚠ ${w}</div>`).join('');
   updateConnUI();
 }
 function updateConnUI(){
   if(!CFG.valid_modes) return;
-  const mode=CFG.ai_mode;
-  $('#connChip').textContent = mode==='api'?t('connApi') : mode==='sdk'?t('connSdk') : t('connDemo');
-  $('#connChip').classList.toggle('hidden', !CFG.onboarded);
-  $('#disconnectBtn').classList.toggle('hidden', !CFG.onboarded);
+  const mode=CFG.ai_mode, cb=$('#connBtn');
+  $$('#modeSeg button').forEach(b=>b.classList.toggle('on', b.dataset.m===mode));
+  if(mode==='mock'){ cb.classList.add('hidden'); return; }   // mock: без «подключить/отключить»
+  cb.classList.remove('hidden');
+  if(CFG.connected){
+    cb.textContent=t('disconnect'); cb.classList.add('disconnect'); cb.classList.remove('connect');
+    cb.onclick=doDisconnect;
+  } else {
+    cb.textContent=t('connect'); cb.classList.add('connect'); cb.classList.remove('disconnect');
+    cb.onclick=()=>openConnect(mode);
+  }
 }
 async function saveConfig(patch){
   await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)});
   await loadConfig();
 }
+async function selectMode(mode){
+  await saveConfig({ai_mode:mode});                       // сделать режим активным + перечитать CFG
+  if(mode!=='mock' && !CFG.connected) openConnect(mode);  // не подключён -> сразу окно подключения
+}
+let CONNECT_MODE=null;
+function openConnect(mode){
+  CONNECT_MODE=mode;
+  $('#suApiBox').classList.toggle('hidden', mode!=='api');
+  $('#suSdkBox').classList.toggle('hidden', mode!=='sdk');
+  $('#suKey').value=''; $('#suRemember').checked=false;
+  showSetup();
+  if(mode==='api') $('#suKey').focus();
+}
 function showSetup(){ $('#setup').classList.remove('hidden');
   const sk=$('#suKey'); if(sk) sk.placeholder=t('apiKeyPh'); }
 function hideSetup(){ $('#setup').classList.add('hidden'); }
-async function onboard(mode, extra){
-  await fetch('/api/onboard',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(Object.assign({mode}, extra||{}))});
+async function doConnect(){
+  const mode=CONNECT_MODE, body={mode, remember:$('#suRemember').checked};
+  if(mode==='api'){ const k=$('#suKey').value.trim(); if(!k){ $('#suKey').focus(); return; } body.api_key=k; }
+  await fetch('/api/connect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   await loadConfig(); hideSetup();
+}
+async function doDisconnect(){
+  await fetch('/api/disconnect',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({mode:CFG.ai_mode})});
+  await loadConfig();
 }
 async function loadDataset(){
   const d=await (await fetch('/api/dataset')).json();
@@ -460,14 +487,10 @@ function renderReport(r){
 }
 
 $('#langSel').onchange=e=>applyLang(e.target.value);
-$('#disconnectBtn').onclick=async ()=>{ await fetch('/api/disconnect',{method:'POST'}); await loadConfig(); showSetup(); };
-$('#suApi').onclick=()=>{ $('#suSdkBox').classList.add('hidden'); $('#suApiBox').classList.remove('hidden'); $('#suKey').focus(); };
-$('#suSdk').onclick=()=>{ $('#suApiBox').classList.add('hidden'); $('#suSdkBox').classList.remove('hidden'); };
-$('#suApiGo').onclick=()=>{ const k=$('#suKey').value.trim(); if(!k){ $('#suKey').focus(); return; } onboard('api',{api_key:k, remember:$('#suApiRemember').checked}); };
-$('#suSdkGo').onclick=()=>{ onboard('sdk',{remember:$('#suSdkRemember').checked}); };
-$('#suKey').onkeydown=e=>{ if(e.key==='Enter') $('#suApiGo').click(); };
-$('#suDemo').onclick=()=>onboard('mock');
-(async()=>{ await loadConfig(); await loadDataset(); applyLang(LANG); if(!CFG.onboarded) showSetup(); })();
+$('#suGo').onclick=doConnect;
+$('#suCancel').onclick=hideSetup;
+$('#suKey').onkeydown=e=>{ if(e.key==='Enter') doConnect(); };
+(async()=>{ await loadConfig(); await loadDataset(); applyLang(LANG); })();
 </script>
 </body>
 </html>
